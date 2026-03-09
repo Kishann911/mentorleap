@@ -212,7 +212,7 @@ export default function CorporateSection() {
                 ))}
               </ul>
 
-              <Link href="#" className="corp-btn">
+              <Link href="/contact" className="corp-btn">
                 Book Corporate Training
               </Link>
             </div>

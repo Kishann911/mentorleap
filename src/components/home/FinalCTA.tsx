@@ -246,13 +246,13 @@ export default function FinalCTA() {
               transition: "opacity 0.6s ease 0.5s, transform 0.6s ease 0.5s",
             }}
           >
-            <Link href="#" className="cta-btn-primary">
+            <Link href="/signup" className="cta-btn-primary">
               Join Free Course
             </Link>
-            <Link href="#" className="cta-btn-secondary">
+            <Link href="/events" className="cta-btn-secondary">
               Register Bootcamp
             </Link>
-            <Link href="#" className="cta-btn-outline">
+            <Link href="/hire-anchor" className="cta-btn-outline">
               Hire Mridu for Event
             </Link>
           </div>

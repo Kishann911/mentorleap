@@ -285,7 +285,7 @@ export default function MishaSection() {
                 transition: "opacity 0.5s ease 0.85s, transform 0.5s ease 0.85s",
               }}
             >
-              <Link href="#" className="misha-btn">
+              <Link href="/dashboard/ai-assistant" className="misha-btn">
                 Start Conversation with MISHA
               </Link>
             </div>

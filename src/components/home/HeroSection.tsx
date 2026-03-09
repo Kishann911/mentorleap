@@ -146,13 +146,13 @@ export default function HeroSection() {
               }}
             >
               <Link
-                href="#"
+                href="/signup"
                 className="cta-primary text-white no-underline text-sm rounded-full px-6 py-3"
               >
                 Join Free Course
               </Link>
               <Link
-                href="#"
+                href="/events"
                 className="cta-secondary text-white no-underline text-sm rounded-full px-6 py-3"
                 style={{
                   background: "#0f172a",
@@ -162,7 +162,7 @@ export default function HeroSection() {
                 Bootcamp Details
               </Link>
               <Link
-                href="#"
+                href="/hire-anchor"
                 className="cta-outline no-underline text-sm rounded-full px-6 py-3"
                 style={{
                   border: "1px solid #00e5ff",

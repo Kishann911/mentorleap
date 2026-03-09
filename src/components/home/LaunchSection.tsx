@@ -33,8 +33,8 @@ function useCountdown(targetMs: number): TimeLeft {
       const dist = targetMs - Date.now();
       if (dist <= 0) { setTime({ days: 0, hours: 0, minutes: 0, seconds: 0 }); return; }
       setTime({
-        days:    Math.floor(dist / 86400000),
-        hours:   Math.floor((dist % 86400000) / 3600000),
+        days: Math.floor(dist / 86400000),
+        hours: Math.floor((dist % 86400000) / 3600000),
         minutes: Math.floor((dist % 3600000) / 60000),
         seconds: Math.floor((dist % 60000) / 1000),
       });
@@ -292,7 +292,7 @@ export default function LaunchSection() {
                   )}
                 </div>
 
-                <Link href="#" className="launch-btn">
+                <Link href="/signup" className="launch-btn">
                   {card.cta}
                 </Link>
               </div>
@@ -310,9 +310,9 @@ export default function LaunchSection() {
               🚀 Launch Starts In
             </h4>
             <div className="flex items-center justify-center gap-3 flex-wrap">
-              <CountdownUnit value={time.days}    label="Days"    />
+              <CountdownUnit value={time.days} label="Days" />
               <span className="colon">:</span>
-              <CountdownUnit value={time.hours}   label="Hours"   />
+              <CountdownUnit value={time.hours} label="Hours" />
               <span className="colon">:</span>
               <CountdownUnit value={time.minutes} label="Minutes" />
               <span className="colon">:</span>

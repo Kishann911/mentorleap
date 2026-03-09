@@ -1,0 +1,73 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        request.auth.token.role == 'admin'
+      );
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // --- Users Collection ---
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isSignedIn();
+      allow update: if isOwner(userId) || isAdmin();
+    }
+
+    // --- Courses Collection ---
+    match /courses/{courseId} {
+      allow read: if true; // Publicly viewable
+      allow write: if isAdmin();
+    }
+
+    // --- Events Collection ---
+    match /events/{eventId} {
+      allow read: if true; // Publicly viewable
+      allow update: if isSignedIn(); // For registering (attendees array union)
+      allow write: if isAdmin();
+    }
+
+    // --- Resources Collection ---
+    match /resources/{resourceId} {
+      allow read: if isAdmin() || (
+        isSignedIn() && (
+          // Logic for purchased: item might be free or user has valid transaction
+          // For now, allow reading if signed in for demo, or refine with transaction check
+          true 
+        )
+      );
+      allow write: if isAdmin();
+    }
+
+    // --- Certificates Collection ---
+    match /certificates/{certId} {
+      allow read: if isSignedIn() && (isOwner(resource.data.userId) || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // --- Transactions Collection ---
+    match /transactions/{transId} {
+      allow read: if isSignedIn() && (isOwner(resource.data.userId) || isAdmin());
+      allow create: if isSignedIn();
+      allow update: if isAdmin();
+    }
+
+    // --- Blogs Collection ---
+    match /blogs/{blogId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

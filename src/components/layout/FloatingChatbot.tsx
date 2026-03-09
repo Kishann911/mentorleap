@@ -68,20 +68,37 @@ export default function FloatingChatbot() {
       bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
   }, [messages, typedGreeting]);
 
-  const send = (text: string) => {
+  const [isTyping, setIsTyping] = useState(false);
+
+  const send = async (text: string) => {
     const val = text.trim();
-    if (!val) return;
+    if (!val || isTyping) return;
+
     const userMsg: Message = { role: "user", text: val };
-    const key = val.toLowerCase();
-    const reply =
-      BOT_REPLIES[key] ||
-      "Thanks for reaching out! A MentorLeap expert will guide you shortly. 🙏";
-    setMessages((prev) => [
-      ...prev,
-      userMsg,
-      { role: "bot", text: reply },
-    ]);
+    setMessages((prev) => [...prev, userMsg]);
     setInput("");
+    setIsTyping(true);
+
+    try {
+      const res = await fetch("/api/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: val }),
+      });
+      const data = await res.json();
+
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", text: data.reply || "I'm processing that session. One moment..." },
+      ]);
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", text: "I'm having a slight connection glitch. Can we try that again?" },
+      ]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   const handleKey = (e: React.KeyboardEvent) => {
@@ -336,6 +353,15 @@ export default function FloatingChatbot() {
                   {m.text}
                 </div>
               ))
+            )}
+            {isTyping && (
+              <div className="misha-msg" style={{ background: "#0f172a", color: "#00e5ff", padding: "10px 14px", borderRadius: "10px 10px 10px 2px", alignSelf: "flex-start", opacity: 0.6 }}>
+                <div style={{ display: "flex", gap: "4px" }}>
+                  <div className="w-1.5 h-1.5 bg-[#00e5ff] rounded-full animate-bounce"></div>
+                  <div className="w-1.5 h-1.5 bg-[#00e5ff] rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                  <div className="w-1.5 h-1.5 bg-[#00e5ff] rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                </div>
+              </div>
             )}
           </div>
 

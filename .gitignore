@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+/functions/node_modules
+/functions/lib
 /.pnp
 .pnp.*
 .yarn/*
@@ -39,3 +41,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Firebase service account keys (SENSITIVE)
+*.json
+!package.json
+!tsconfig.json
+!firebase.json
+!firestore.indexes.json
+!eslint.config.mjs
+
+# Temporary test scripts
+test-*.js
+testUpload.js
+fix-admin.js
+seed-*.js

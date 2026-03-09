@@ -166,8 +166,8 @@ export default function ProgramsSection() {
                 border: p.premium
                   ? "1px solid #6366f1"
                   : hovered === i
-                  ? "1px solid #00e5ff"
-                  : "1px solid rgba(255,255,255,0.08)",
+                    ? "1px solid #00e5ff"
+                    : "1px solid rgba(255,255,255,0.08)",
                 transform: visible
                   ? hovered === i
                     ? "translateY(-10px)"
@@ -283,7 +283,7 @@ export default function ProgramsSection() {
               )}
 
               {/* CTA */}
-              <Link href="#" className="program-btn">
+              <Link href="/events" className="program-btn">
                 {p.cta}
               </Link>
             </div>

@@ -183,10 +183,10 @@ export default function OfferBanner() {
               flexShrink: 0,
             }}
           >
-            <Link href="#" className="ml-offer-btn1">
+            <Link href="/signup" className="ml-offer-btn1">
               Enroll Free Course
             </Link>
-            <Link href="#" className="ml-offer-btn2">
+            <Link href="/events" className="ml-offer-btn2">
               Bootcamp Details
             </Link>
           </div>

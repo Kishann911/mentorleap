@@ -5,14 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 const navLinks = [
-  { label: "Home", href: "#" },
-  { label: "Executive Coaching", href: "#" },
-  { label: "Live Events", href: "#" },
-  { label: "Resource Library", href: "#" },
-  { label: "MentorLeap Studio", href: "#" },
-  { label: "Corporate Training", href: "#" },
-  { label: "Hire Mridu", href: "#" },
-  { label: "Contact", href: "#" },
+  { label: "Home", href: "/" },
+  { label: "Explore Courses", href: "/courses" },
+  { label: "Executive Coaching", href: "/coaching" },
+  { label: "Live Events", href: "/events" },
+  { label: "Resource Library", href: "/resources" },
+  { label: "MentorLeap Studio", href: "/studio" },
+  { label: "Hire Mridu as Anchor", href: "/hire-anchor" },
+  { label: "Blog", href: "/blog" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function Header() {
@@ -193,7 +194,7 @@ export default function Header() {
               }}
               className="hidden-mobile"
             >
-              <Link href="#" className="ml-cta-btn">
+              <Link href="/signup" className="ml-cta-btn">
                 Join Free Course
               </Link>
             </div>
@@ -242,7 +243,7 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
-            <Link href="#" className="ml-cta-btn" style={{ textAlign: "center", marginTop: "8px" }}>
+            <Link href="/signup" className="ml-cta-btn" style={{ textAlign: "center", marginTop: "8px" }}>
               Join Free Course
             </Link>
           </div>
