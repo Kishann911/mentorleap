@@ -1,7 +1,7 @@
 import React from 'react';
 
-export function Input({ className = '', ...props }: any) {
-  return (
+export function Input({ label, className = '', ...props }: any) {
+  const inputElement = (
     <input
       className={`w-full px-4 py-3 rounded-xl text-sm focus:outline-none transition-all ${className}`}
       style={{
@@ -20,10 +20,21 @@ export function Input({ className = '', ...props }: any) {
       {...props}
     />
   );
+
+  if (!label) return inputElement;
+
+  return (
+    <div className="space-y-2">
+      <label className="text-[10px] text-[#475569] font-black uppercase tracking-widest pl-1 block mb-1">
+        {label}
+      </label>
+      {inputElement}
+    </div>
+  );
 }
 
-export function Textarea({ className = '', ...props }: any) {
-  return (
+export function Textarea({ label, className = '', ...props }: any) {
+  const textareaElement = (
     <textarea
       className={`w-full px-4 py-3 rounded-xl text-sm focus:outline-none transition-all ${className}`}
       style={{
@@ -42,5 +53,16 @@ export function Textarea({ className = '', ...props }: any) {
       }}
       {...props}
     />
+  );
+
+  if (!label) return textareaElement;
+
+  return (
+    <div className="space-y-2">
+      <label className="text-[10px] text-[#475569] font-black uppercase tracking-widest pl-1 block mb-1">
+        {label}
+      </label>
+      {textareaElement}
+    </div>
   )
 }

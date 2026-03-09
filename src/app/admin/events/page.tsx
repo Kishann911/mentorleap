@@ -34,9 +34,8 @@ export default function AdminEvents() {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/events");
-      const data = await res.json();
-      setEvents(Array.isArray(data) ? data : []);
+      const data = await AdminAPI.getEvents();
+      setEvents(data);
     } catch (error) {
       console.error(error);
       showToast("Failed to fetch events", "error");
@@ -61,12 +60,7 @@ export default function AdminEvents() {
         bannerUrl = uploadRes.url;
       }
 
-      const res = await fetch("/api/events", {
-        method: "POST",
-        headers: await getHeaders(),
-        body: JSON.stringify({ ...formData, banner: bannerUrl }),
-      });
-      if (!res.ok) throw new Error("Failed to create event");
+      await AdminAPI.createEvent({ ...formData, banner: bannerUrl });
 
       showToast("Event created successfully!", "success");
       setIsModalOpen(false);
@@ -78,16 +72,6 @@ export default function AdminEvents() {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  // Helper for headers
-  const getHeaders = async () => {
-    const { auth } = await import("@/lib/firebase");
-    const token = await auth.currentUser?.getIdToken();
-    return {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json",
-    };
   };
 
   const formatDate = (date: any) => {

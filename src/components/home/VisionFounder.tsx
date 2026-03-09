@@ -3,13 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-const stats = [
+import { fetchFounderInfo } from "@/lib/api";
+
+const defaultStats = [
   { target: 15,    label: "Years Experience" },
   { target: 500,   label: "Corporate Events" },
   { target: 10000, label: "Professionals Impacted" },
 ];
 
-const videos = [
+const defaultVideos = [
   "PWTz7eGclu8",
   "bZ9BtRfgg6o",
   "ZrVv0gkkaMs",
@@ -59,6 +61,28 @@ function Counter({ target, visible }: { target: number; visible: boolean }) {
 
 export default function VisionFounder() {
   const { ref: sectionRef, visible } = useInView();
+  const [founderInfo, setFounderInfo] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchFounderInfo().then(data => {
+      setFounderInfo(data);
+      setLoading(false);
+    });
+  }, []);
+
+  const info = founderInfo || {
+    name: "Mridu Bhandari",
+    image: "https://marktaleevents.com/mentorleap/wp-content/uploads/2026/03/MG_4654.jpg",
+    tagline: "Transforming professionals into confident communicators and strategic leaders.",
+    bio: [
+      "After moderating hundreds of leadership forums and corporate conversations, Mridu Bhandari observed a recurring challenge among professionals. Many individuals possess knowledge and expertise but struggle to communicate ideas with clarity, structure and confidence.",
+      "MentorLeap was created to bridge this gap by combining real-world leadership frameworks with MISHA — Mentorship & Intelligence for Strategic Human Advancement. This AI learning companion supports professionals throughout their learning and career journey.",
+      "The mission of MentorLeap is simple yet powerful: help professionals think clearly, communicate confidently and lead effectively.",
+    ],
+    stats: defaultStats,
+    videos: defaultVideos,
+  };
 
   return (
     <>
@@ -124,7 +148,7 @@ export default function VisionFounder() {
         className="w-full px-5"
         style={{ padding: "140px 20px" }}
       >
-        <div className="mx-auto" style={{ maxWidth: "1300px" }}>
+        <div className="mx-auto" style={{ maxWidth: "1300px" }} suppressHydrationWarning>
 
           {/* TOP: IMAGE + CONTENT */}
           <div
@@ -145,8 +169,8 @@ export default function VisionFounder() {
             >
               <div className="img-glow" />
               <Image
-                src="https://marktaleevents.com/mentorleap/wp-content/uploads/2026/03/MG_4654.jpg"
-                alt="Mridu Bhandari"
+                src={info.image || "https://marktaleevents.com/mentorleap/wp-content/uploads/2026/03/MG_4654.jpg"}
+                alt={info.name || "Mridu Bhandari"}
                 width={600}
                 height={700}
                 className="founder-img rounded-2xl w-full relative"
@@ -177,15 +201,10 @@ export default function VisionFounder() {
                 className="font-medium mb-5"
                 style={{ color: "#00e5ff", fontSize: "18px" }}
               >
-                Transforming professionals into confident communicators and
-                strategic leaders.
+                {info.tagline || "Transforming professionals into confident communicators and strategic leaders."}
               </p>
 
-              {[
-                "After moderating hundreds of leadership forums and corporate conversations, Mridu Bhandari observed a recurring challenge among professionals. Many individuals possess knowledge and expertise but struggle to communicate ideas with clarity, structure and confidence.",
-                "MentorLeap was created to bridge this gap by combining real-world leadership frameworks with MISHA — Mentorship & Intelligence for Strategic Human Advancement. This AI learning companion supports professionals throughout their learning and career journey.",
-                "The mission of MentorLeap is simple yet powerful: help professionals think clearly, communicate confidently and lead effectively.",
-              ].map((text, i) => (
+              {(info.bio || []).map((text: string, i: number) => (
                 <p
                   key={i}
                   className="mb-4"
@@ -207,7 +226,7 @@ export default function VisionFounder() {
                 className="flex flex-wrap mt-8"
                 style={{ gap: "25px" }}
               >
-                {stats.map((stat, i) => (
+                {(info.stats || []).map((stat: any, i: number) => (
                   <div
                     key={stat.label}
                     className="stat-card rounded-xl text-center"
@@ -245,7 +264,7 @@ export default function VisionFounder() {
               transition: "opacity 0.6s ease 0.9s, transform 0.6s ease 0.9s",
             }}
           >
-            {videos.map((id) => (
+            {(info.videos || []).map((id: string) => (
               <iframe
                 key={id}
                 className="video-frame rounded-xl"

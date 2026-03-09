@@ -92,6 +92,7 @@ export default function DynamicBackground() {
 
       <div
         ref={containerRef}
+        suppressHydrationWarning
         style={{
           position: "fixed",
           top: 0,

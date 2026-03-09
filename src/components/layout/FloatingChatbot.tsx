@@ -199,6 +199,7 @@ export default function FloatingChatbot() {
       `}</style>
 
       <div
+        suppressHydrationWarning
         style={{
           position: "fixed",
           bottom: "25px",
@@ -210,6 +211,7 @@ export default function FloatingChatbot() {
         {/* CHAT WINDOW */}
         <div
           className={`misha-chat-window ${chatVisible ? "visible" : ""}`}
+          suppressHydrationWarning
           style={{
             width: "340px",
             background: "#020617",
@@ -226,6 +228,7 @@ export default function FloatingChatbot() {
         >
           {/* HEADER */}
           <div
+            suppressHydrationWarning
             style={{
               background: "linear-gradient(135deg, #0f172a, #1e1b4b)",
               borderBottom: "1px solid rgba(0,229,255,0.1)",
@@ -237,6 +240,7 @@ export default function FloatingChatbot() {
             }}
           >
             <div
+              suppressHydrationWarning
               style={{
                 width: "36px",
                 height: "36px",
@@ -254,13 +258,15 @@ export default function FloatingChatbot() {
                 style={{ objectFit: "cover" }}
               />
             </div>
-            <div>
+            <div suppressHydrationWarning>
               <div
                 style={{ color: "white", fontWeight: 700, fontSize: "14px" }}
+                suppressHydrationWarning
               >
                 MISHA
               </div>
               <div
+                suppressHydrationWarning
                 style={{
                   fontSize: "11px",
                   color: "#00e5ff",
@@ -294,6 +300,7 @@ export default function FloatingChatbot() {
           <div
             ref={bodyRef}
             className="misha-body"
+            suppressHydrationWarning
             style={{
               flex: 1,
               padding: "14px",
@@ -307,6 +314,7 @@ export default function FloatingChatbot() {
             {!greetingDone ? (
               <div
                 className="misha-msg"
+                suppressHydrationWarning
                 style={{
                   background: "#0f172a",
                   color: "#cbd5f5",
@@ -367,6 +375,7 @@ export default function FloatingChatbot() {
 
           {/* SUGGESTIONS */}
           <div
+            suppressHydrationWarning
             style={{
               display: "flex",
               gap: "8px",
@@ -389,6 +398,7 @@ export default function FloatingChatbot() {
 
           {/* INPUT */}
           <div
+            suppressHydrationWarning
             style={{
               display: "flex",
               borderTop: "1px solid rgba(255,255,255,0.08)",

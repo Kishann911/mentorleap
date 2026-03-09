@@ -3,46 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-const programs = [
-  {
-    badge: "FREE",
-    badgeStyle: "free",
-    title: "1 Hour Personality Development Course",
-    host: "By Mridu Bhandari",
-    desc: "A powerful introduction to communication, confidence and leadership mindset designed to help professionals unlock their potential.",
-    features: [
-      "Improve professional confidence",
-      "Leadership communication insights",
-      "Career growth frameworks",
-      "Live session with Mridu Bhandari",
-    ],
-    date: "Launch Event — 15 March 2026",
-    price: "Worth ₹2999",
-    priceHighlight: "FREE",
-    offer: null,
-    cta: "Enroll Free",
-    premium: false,
-  },
-  {
-    badge: "BOOTCAMP",
-    badgeStyle: "premium",
-    title: "Professional Transformation Bootcamp",
-    host: "By Mridu Bhandari",
-    desc: "An intensive 2-day transformation program designed to elevate your professional presence, leadership confidence and career clarity.",
-    features: [
-      "Deep communication training",
-      "Leadership positioning",
-      "Career growth blueprint",
-      "Interactive transformation sessions",
-    ],
-    date: "28 – 29 March 2026",
-    price: "₹7999",
-    priceHighlight: null,
-    offer: "10 Lucky Participants — FREE Access\nNext 50 Participants — 50% Discount",
-    cta: "Reserve Seat",
-    premium: true,
-  },
-];
+import { fetchEvents } from "@/lib/api";
 
 function useInView(threshold = 0.1) {
   const ref = useRef<HTMLElement>(null);
@@ -61,6 +22,15 @@ function useInView(threshold = 0.1) {
 export default function ProgramsSection() {
   const { ref, visible } = useInView();
   const [hovered, setHovered] = useState<number | null>(null);
+  const [events, setEvents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchEvents().then(data => {
+      setEvents(data);
+      setLoading(false);
+    });
+  }, []);
 
   return (
     <>
@@ -149,21 +119,26 @@ export default function ProgramsSection() {
         {/* GRID */}
         <div
           className="mx-auto grid gap-10"
+          suppressHydrationWarning
           style={{
             maxWidth: "1200px",
-            gridTemplateColumns: "repeat(2, 1fr)",
+            gridTemplateColumns: loading || events.length === 0 ? "1fr" : "repeat(2, 1fr)",
           }}
         >
-          {programs.map((p, i) => (
+          {loading ? (
+            <div className="text-[#94a3b8] animate-pulse py-20 bg-white/5 rounded-3xl border border-white/10">Synchronizing with event registry...</div>
+          ) : events.length === 0 ? (
+            <div className="text-[#94a3b8] italic py-20 bg-white/5 rounded-3xl border border-white/10">No live programs scheduled. Please check back later.</div>
+          ) : events.map((p, i) => (
             <div
-              key={p.title}
-              className={`relative rounded-2xl text-left ${p.premium ? "premium-card-glow" : ""}`}
+              key={p.id}
+              className={`relative rounded-2xl text-left ${p.type === 'premium' ? "premium-card-glow" : ""}`}
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
               style={{
                 background: "#020617",
                 padding: "40px",
-                border: p.premium
+                border: p.type === 'premium'
                   ? "1px solid #6366f1"
                   : hovered === i
                     ? "1px solid #00e5ff"
@@ -187,8 +162,8 @@ export default function ProgramsSection() {
                   style={{
                     top: "-12px",
                     left: "20px",
-                    background: p.badgeStyle === "free" ? "#00e5ff" : "#6366f1",
-                    color: p.badgeStyle === "free" ? "#020617" : "white",
+                    background: p.badgeColor || (p.price === 0 ? "#00e5ff" : "#6366f1"),
+                    color: p.price === 0 ? "#020617" : "white",
                     fontSize: "11px",
                     padding: "6px 14px",
                     borderRadius: "20px",
@@ -196,7 +171,7 @@ export default function ProgramsSection() {
                     letterSpacing: "1px",
                   }}
                 >
-                  {p.badge}
+                  {p.badge || (p.price === 0 ? "FREE" : "PREMIUM")}
                 </div>
               )}
 
@@ -213,7 +188,7 @@ export default function ProgramsSection() {
                 className="mb-4"
                 style={{ color: "#00e5ff", fontSize: "14px" }}
               >
-                {p.host}
+                {p.speaker || "By Mridu Bhandari"}
               </p>
 
               {/* DESC */}
@@ -221,27 +196,29 @@ export default function ProgramsSection() {
                 className="mb-5"
                 style={{ color: "#94a3b8", lineHeight: "1.6", fontSize: "14px" }}
               >
-                {p.desc}
+                {p.description}
               </p>
 
               {/* FEATURES */}
-              <ul className="mb-5" style={{ listStyle: "none", padding: 0 }}>
-                {p.features.map((f, fi) => (
-                  <li
-                    key={f}
-                    className="program-li mb-2"
-                    style={{
-                      color: "#cbd5f5",
-                      fontSize: "14px",
-                      opacity: visible ? 1 : 0,
-                      transform: visible ? "translateX(0)" : "translateX(-10px)",
-                      transition: `opacity 0.4s ease ${0.4 + i * 0.1 + fi * 0.07}s, transform 0.4s ease ${0.4 + i * 0.1 + fi * 0.07}s`,
-                    }}
-                  >
-                    {f}
-                  </li>
-                ))}
-              </ul>
+              {p.features && (
+                <ul className="mb-5" style={{ listStyle: "none", padding: 0 }}>
+                  {p.features.map((f: string, fi: number) => (
+                    <li
+                      key={fi}
+                      className="program-li mb-2"
+                      style={{
+                        color: "#cbd5f5",
+                        fontSize: "14px",
+                        opacity: visible ? 1 : 0,
+                        transform: visible ? "translateX(0)" : "translateX(-10px)",
+                        transition: `opacity 0.4s ease ${0.4 + i * 0.1 + fi * 0.07}s, transform 0.4s ease ${0.4 + i * 0.1 + fi * 0.07}s`,
+                      }}
+                    >
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              )}
 
               {/* DIVIDER */}
               <div
@@ -257,7 +234,7 @@ export default function ProgramsSection() {
                 className="font-semibold mb-3"
                 style={{ color: "#00e5ff", fontSize: "14px" }}
               >
-                📅 {p.date}
+                📅 {p.date ? (p.date._seconds ? new Date(p.date._seconds * 1000).toLocaleDateString() : (p.date.seconds ? new Date(p.date.seconds * 1000).toLocaleDateString() : String(p.date))) : "TBD"}
               </p>
 
               {/* PRICE */}
@@ -265,26 +242,12 @@ export default function ProgramsSection() {
                 className="font-bold mb-3"
                 style={{ color: "white", fontSize: "20px" }}
               >
-                {p.price}{" "}
-                {p.priceHighlight && (
-                  <span style={{ color: "#00e5ff" }}>{p.priceHighlight}</span>
-                )}
+                {p.price === 0 ? "FREE" : `₹${p.price}`}
               </p>
 
-              {/* OFFER */}
-              {p.offer && (
-                <div className="mb-5">
-                  {p.offer.split("\n").map((line) => (
-                    <p key={line} className="offer-line">
-                      {line}
-                    </p>
-                  ))}
-                </div>
-              )}
-
               {/* CTA */}
-              <Link href="/events" className="program-btn">
-                {p.cta}
+              <Link href={`/events/${p.id}`} className="program-btn">
+                Reserve Seat
               </Link>
             </div>
           ))}

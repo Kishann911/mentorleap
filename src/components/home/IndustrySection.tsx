@@ -158,6 +158,7 @@ export default function IndustrySection() {
             maxWidth: "1300px",
             gridTemplateColumns: "repeat(2, 1fr)",
           }}
+          suppressHydrationWarning
         >
           {cards.map((card, i) => (
             <div

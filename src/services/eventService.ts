@@ -33,4 +33,12 @@ export const EventService = {
         const doc = await db.collection("events").doc(eventId).get();
         return doc.exists ? ({ id: doc.id, ...doc.data() } as Event) : null;
     },
+
+    async updateEvent(eventId: string, data: Partial<Event>) {
+        await db.collection("events").doc(eventId).update(data);
+    },
+
+    async deleteEvent(eventId: string) {
+        await db.collection("events").doc(eventId).delete();
+    },
 };

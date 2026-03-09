@@ -13,13 +13,10 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/events")
-      .then(res => res.json())
-      .then(data => {
-        setEvents(Array.isArray(data) ? data : []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    fetchEvents().then(data => {
+      setEvents(data);
+      setLoading(false);
+    }).catch(() => setLoading(false));
   }, []);
 
   return (

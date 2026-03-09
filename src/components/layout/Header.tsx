@@ -7,11 +7,11 @@ import Link from "next/link";
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Explore Courses", href: "/courses" },
-  { label: "Executive Coaching", href: "/coaching" },
+  { label: "Executive Coaching", href: "/executive-coaching" },
   { label: "Live Events", href: "/events" },
   { label: "Resource Library", href: "/resources" },
-  { label: "MentorLeap Studio", href: "/studio" },
-  { label: "Hire Mridu as Anchor", href: "/hire-anchor" },
+  { label: "MentorLeap Studio", href: "/mentorleap-studio" },
+  { label: "Hire Mridu as Anchor", href: "/hire-mridu-anchor" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ];
@@ -113,6 +113,7 @@ export default function Header() {
 
       <header
         className="ml-header-animate"
+        suppressHydrationWarning
         style={{
           position: "fixed",
           top: 0,
@@ -130,6 +131,7 @@ export default function Header() {
       >
         {/* MAIN ROW */}
         <div
+          suppressHydrationWarning
           style={{
             maxWidth: "1400px",
             margin: "auto",
@@ -141,6 +143,7 @@ export default function Header() {
         >
           {/* LOGO */}
           <div
+            suppressHydrationWarning
             style={{
               opacity: mounted ? 1 : 0,
               transform: mounted ? "translateX(0)" : "translateX(-20px)",
@@ -193,8 +196,9 @@ export default function Header() {
                 transition: "opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s",
               }}
               className="hidden-mobile"
+              suppressHydrationWarning
             >
-              <Link href="/signup" className="ml-cta-btn">
+              <Link href="/auth/register" className="ml-cta-btn">
                 Join Free Course
               </Link>
             </div>
@@ -222,8 +226,9 @@ export default function Header() {
         </div>
 
         {/* MOBILE MENU */}
-        <div className={`ml-mobile-menu ${menuOpen ? "open" : ""}`}>
+        <div className={`ml-mobile-menu ${menuOpen ? "open" : ""}`} suppressHydrationWarning>
           <div
+            suppressHydrationWarning
             style={{
               padding: "12px 20px 20px",
               display: "flex",
@@ -243,7 +248,7 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
-            <Link href="/signup" className="ml-cta-btn" style={{ textAlign: "center", marginTop: "8px" }}>
+            <Link href="/auth/register" className="ml-cta-btn" style={{ textAlign: "center", marginTop: "8px" }}>
               Join Free Course
             </Link>
           </div>

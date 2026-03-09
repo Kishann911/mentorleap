@@ -28,7 +28,7 @@ export default function EventDetailsPage() {
   const registerMutation = useMutation({
     mutationFn: async () => {
       if (!user) {
-        router.push("/login?redirect=" + id);
+        router.push("/auth/login?redirect=" + id);
         return;
       }
       const token = await user.getIdToken();

@@ -3,50 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-const services = [
-  {
-    icon: "🧠",
-    title: "Executive Coaching",
-    desc: "1:1 and group coaching for professionals and organizations.",
-    link: "/coaching",
-    cta: "Learn More",
-  },
-  {
-    icon: "🎤",
-    title: "Live Events",
-    desc: "Bootcamps, masterclasses and leadership learning experiences.",
-    link: "/events",
-    cta: "Explore Events",
-  },
-  {
-    icon: "📚",
-    title: "Resource Library",
-    desc: "Digital courses, leadership frameworks and learning resources.",
-    link: "/resources",
-    cta: "Browse Library",
-  },
-  {
-    icon: "🧩",
-    title: "MentorLeap Studio",
-    desc: "Insights, blogs and thought leadership content.",
-    link: "/studio",
-    cta: "Read Insights",
-  },
-  {
-    icon: "🏢",
-    title: "Corporate Training",
-    desc: "Professional communication training for organizations.",
-    link: "/coaching",
-    cta: "Corporate Programs",
-  },
-  {
-    icon: "🎙",
-    title: "Hire Mridu",
-    desc: "Leadership moderation and event anchoring services.",
-    link: "/hire-anchor",
-    cta: "Book Now",
-  },
-];
+import { fetchServices } from "@/lib/api";
 
 function useInView(threshold = 0.1) {
   const ref = useRef<HTMLElement>(null);
@@ -65,6 +22,15 @@ function useInView(threshold = 0.1) {
 export default function ServicesSection() {
   const { ref, visible } = useInView();
   const [hovered, setHovered] = useState<number | null>(null);
+  const [services, setServices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchServices().then((data: any[]) => {
+      setServices(data);
+      setLoading(false);
+    });
+  }, []);
 
   return (
     <>
@@ -113,7 +79,7 @@ export default function ServicesSection() {
         className="w-full px-5 text-center"
         style={{ padding: "140px 20px" }}
       >
-        <div className="mx-auto" style={{ maxWidth: "1200px" }}>
+        <div className="mx-auto" style={{ maxWidth: "1200px" }} suppressHydrationWarning>
 
           {/* TITLE */}
           <h2
@@ -147,13 +113,18 @@ export default function ServicesSection() {
           {/* GRID */}
           <div
             className="grid gap-8"
+            suppressHydrationWarning
             style={{
-              gridTemplateColumns: "repeat(3, 1fr)",
+              gridTemplateColumns: loading || services.length === 0 ? "1fr" : "repeat(3, 1fr)",
             }}
           >
-            {services.map((s, i) => (
+            {loading ? (
+               <div className="text-[#94a3b8] animate-pulse py-20 bg-white/5 rounded-3xl border border-white/10">Orchestrating service portfolio...</div>
+            ) : services.length === 0 ? (
+               <div className="text-[#94a3b8] italic py-20 bg-white/5 rounded-3xl border border-white/10">No specific services listed currently. Please contact us for custom inquiries.</div>
+            ) : services.map((s, i) => (
               <div
-                key={s.title}
+                key={s.id || s.title}
                 className="service-card rounded-2xl text-left"
                 onMouseEnter={() => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
@@ -183,10 +154,10 @@ export default function ServicesSection() {
                   {s.title}
                 </h3>
                 <p className="mb-4" style={{ color: "#94a3b8", fontSize: "14px" }}>
-                  {s.desc}
+                  {s.description || s.desc}
                 </p>
-                <Link href={s.link} className="service-card-link">
-                  {s.cta}
+                <Link href={s.link || "/contact"} className="service-card-link">
+                  {s.cta || "Learn More"}
                 </Link>
               </div>
             ))}

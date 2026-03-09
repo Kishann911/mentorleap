@@ -1,35 +1,58 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const PERSONALITY = "You are MISHA, the premium AI Mentor at MentorLeap. You are professional, motivating, and expert in leadership and communication.";
-
-const BRAIN: Record<string, string> = {
-    "free course": "🎓 Our flagship Personality Development Course by Mridu Bhandari is launching on March 15th! It's completely free for our early community members. Would you like me to help you enroll?",
-    "bootcamp": "🚀 The Professional Transformation Bootcamp (March 28-29) is our most intensive program. It focuses on executive presence and high-stakes communication. We currently have a 50% early-bird discount!",
-    "pricing": "💎 MentorLeap offers tiered access. Our base resources are free, while premium masterclasses range from ₹999 to ₹7999. Which program interests you?",
-    "mridu": "🎤 Mridu Bhandari is an award-winning anchor and executive coach with over 15 years of experience in corporate communications. She personally leads our Masterclasses.",
-};
+const SYSTEM_PROMPT = `You are MISHA, the premium AI Mentor at MentorLeap. You are professional, motivating, and an expert in strategic leadership and communication.
+MentorLeap is founded by Mridu Bhandari, an award-winning former National TV Anchor and Executive Coach.
+Key Offerings:
+- Free Personality Development Course (Launches March 15th, usually ₹2999)
+- Professional Transformation Bootcamp (March 28-29, 50% early-bird discount, intensive executive presence training)
+- Premium Masterclasses (ranging ₹999 to ₹7999)
+- 1-on-1 Executive & Founders Coaching with Mridu
+Be helpful and concise. Keep formatting clean. Always be encouraging to the user's career and personal growth.`;
 
 export async function POST(req: NextRequest) {
     try {
-        const { message } = await req.json();
-        const input = (message || "").toLowerCase();
+        const body = await req.json();
+        const userInput = body.message || body.messages?.pop()?.content || "";
 
-        // 1. Check for specific keywords
-        let reply = "";
-        for (const [key, response] of Object.entries(BRAIN)) {
-            if (input.includes(key)) {
-                reply = response;
-                break;
-            }
+        if (!process.env.GROQ_API_KEY) {
+            console.warn("GROQ_API_KEY is not set. Using fallback AI response.");
+            return NextResponse.json({ 
+                reply: `As your AI Mentor, I've analyzed your query: "${userInput}". I am currently in 'Offline Integration Mode' as my API key is missing. But I can tell you that successful communication starts with active listening and emotional intelligence!`,
+                response: `As your AI Mentor, I've analyzed your query: "${userInput}". I am currently in 'Offline Integration Mode' as my API key is missing. But I can tell you that successful communication starts with active listening and emotional intelligence!`
+            });
         }
 
-        // 2. Fallback to general intelligence
-        if (!reply) {
-            reply = `As your AI Mentor, I've analyzed your query: "${message}". That's a great question about leadership development. While I'm currently in 'Core Integration Mode', I can tell you that successful communication starts with active listening and emotional intelligence. How can we apply that to your current career goals?`;
+        const messages = body.messages || [{ role: "user", content: userInput }];
+
+        const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                model: "llama-3.3-70b-versatile",
+                messages: [
+                    { role: "system", content: SYSTEM_PROMPT },
+                    ...messages
+                ],
+                temperature: 0.7,
+                max_tokens: 1000
+            })
+        });
+
+        if (!groqRes.ok) {
+            const errorData = await groqRes.json();
+            throw new Error(errorData.error?.message || "Failed to fetch from Groq API");
         }
 
-        return NextResponse.json({ reply, response: reply }); // Supporting both keys used by different components
+        const data = await groqRes.json();
+        const reply = data.choices[0].message.content;
+
+        // Support both reply & response keys for different frontends
+        return NextResponse.json({ reply, response: reply });
     } catch (error: any) {
+        console.error("AI API Error:", error);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

@@ -2,28 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const faqs = [
-  {
-    q: "What is MentorLeap?",
-    a: "MentorLeap is an AI-powered learning platform founded by Mridu Bhandari that helps professionals build leadership confidence, communication clarity and career growth.",
-  },
-  {
-    q: "What is MISHA AI?",
-    a: "MISHA stands for Mentorship & Intelligence for Strategic Human Advancement. It is the AI assistant that supports learners with guidance, interview preparation, research help and course navigation.",
-  },
-  {
-    q: "Is the Personality Development Course really free?",
-    a: "Yes. The one-hour Personality Development session by Mridu Bhandari normally costs ₹2999, but it is offered free on the official MentorLeap launch on 15 March 2026.",
-  },
-  {
-    q: "What will I learn in the Bootcamp?",
-    a: "The Bootcamp focuses on leadership communication, confidence building, professional presence, public speaking frameworks and career growth strategies.",
-  },
-  {
-    q: "Who should attend MentorLeap programs?",
-    a: "MentorLeap programs are designed for professionals, managers, entrepreneurs, corporate teams and anyone looking to strengthen leadership communication and career confidence.",
-  },
-];
+import { fetchFAQs } from "@/lib/api";
 
 function useInView(threshold = 0.1) {
   const ref = useRef<HTMLElement>(null);
@@ -43,6 +22,15 @@ export default function FAQSection() {
   const { ref, visible } = useInView();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [hovered, setHovered] = useState<number | null>(null);
+  const [faqs, setFaqs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchFAQs().then((data: any[]) => {
+      setFaqs(data);
+      setLoading(false);
+    });
+  }, []);
 
   const toggle = (i: number) =>
     setOpenIndex((prev) => (prev === i ? null : i));
@@ -143,13 +131,18 @@ export default function FAQSection() {
         {/* FAQ LIST */}
         <div
           className="mx-auto flex flex-col"
+          suppressHydrationWarning
           style={{ maxWidth: "900px", gap: "18px" }}
         >
-          {faqs.map((faq, i) => {
+          {loading ? (
+             <div className="text-[#94a3b8] animate-pulse py-10 bg-white/5 rounded-2xl border border-white/10">Synchronizing knowledge base...</div>
+          ) : faqs.length === 0 ? (
+             <div className="text-[#94a3b8] italic py-10 bg-white/5 rounded-2xl border border-white/10">No questions found. Contact support for assistance.</div>
+          ) : faqs.map((faq, i) => {
             const isOpen = openIndex === i;
             return (
               <div
-                key={faq.q}
+                key={faq.id || faq.q}
                 className={`faq-card rounded-2xl text-left ${isOpen ? "active-card" : ""}`}
                 onClick={() => toggle(i)}
                 onMouseEnter={() => setHovered(i)}
@@ -185,7 +178,7 @@ export default function FAQSection() {
                       color: isOpen ? "white" : "#e2e8f0",
                     }}
                   >
-                    {faq.q}
+                    {faq.q || faq.question}
                   </span>
 
                   <div className={`faq-chevron ${isOpen ? "open" : ""}`} />
@@ -205,7 +198,7 @@ export default function FAQSection() {
                         marginTop: "16px",
                       }}
                     >
-                      {faq.a}
+                      {faq.a || faq.answer}
                     </p>
                   </div>
                 </div>

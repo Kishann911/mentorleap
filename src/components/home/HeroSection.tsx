@@ -86,6 +86,7 @@ export default function HeroSection() {
         <div
           className="mx-auto flex items-center gap-20 flex-wrap"
           style={{ maxWidth: "1300px" }}
+          suppressHydrationWarning
         >
           {/* LEFT CONTENT */}
           <div
@@ -146,7 +147,7 @@ export default function HeroSection() {
               }}
             >
               <Link
-                href="/signup"
+                href="/auth/register"
                 className="cta-primary text-white no-underline text-sm rounded-full px-6 py-3"
               >
                 Join Free Course

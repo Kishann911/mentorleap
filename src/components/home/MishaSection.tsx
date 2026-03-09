@@ -158,6 +158,7 @@ export default function MishaSection() {
         <div
           className="relative mx-auto flex items-center flex-wrap"
           style={{ maxWidth: "1300px", gap: "90px", zIndex: 2 }}
+          suppressHydrationWarning
         >
           {/* MISHA AVATAR */}
           <div

@@ -34,8 +34,102 @@ export async function submitAnchorRequest(data: any) {
 }
 
 export async function fetchEvents() {
-  return [
-    { id: "1", title: "Scale Your Communication", price: 99, date: "28 March 2026", speaker: "Mridu Bhandari", seats: 50 },
-    { id: "2", title: "Founders Bootcamp", price: 299, date: "15 April 2026", speaker: "Mridu Bhandari", seats: 20 },
-  ];
+  try {
+    const q = query(collection(db, "events"));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Firestore fetch error:", error);
+    return [];
+  }
+}
+
+export async function fetchCourseData() {
+  try {
+    const q = query(collection(db, "courses"));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Firestore fetch error:", error);
+    return [];
+  }
+}
+
+export async function fetchBlogs() {
+  try {
+    const q = query(collection(db, "blog_posts"));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Firestore fetch error:", error);
+    return [];
+  }
+}
+
+export async function fetchReviews() {
+  try {
+    const q = query(collection(db, "reviews"));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Firestore fetch error:", error);
+    return [];
+  }
+}
+
+export async function fetchFAQs() {
+  try {
+    const q = query(collection(db, "faqs"));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Firestore fetch error:", error);
+    return [];
+  }
+}
+
+export async function fetchServices() {
+  try {
+    const q = query(collection(db, "services"));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Firestore fetch error:", error);
+    return [];
+  }
+}
+
+export async function fetchFounderInfo() {
+  try {
+    const q = query(collection(db, "site_settings"), where("type", "==", "founder"));
+    const snapshot = await getDocs(q);
+    if (!snapshot.empty) {
+      return snapshot.docs[0].data();
+    }
+    return null;
+  } catch (error) {
+    console.error("Firestore fetch error:", error);
+    return null;
+  }
+}
+
+export async function fetchResources() {
+  try {
+    const q = query(collection(db, "resources"));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Firestore fetch error:", error);
+    return [];
+  }
+}
+export async function fetchCoachingPrograms() {
+  try {
+    const q = query(collection(db, "coaching_programs"));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Firestore fetch error:", error);
+    return [];
+  }
 }

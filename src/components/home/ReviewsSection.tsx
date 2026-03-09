@@ -2,50 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const reviews = [
-  {
-    initial: "A",
-    name: "Aman Verma",
-    location: "Delhi",
-    stars: 5,
-    text: "The personality development session completely changed how I communicate in professional meetings. Mridu Bhandari explains leadership communication in a very practical way.",
-  },
-  {
-    initial: "R",
-    name: "Ritika Sharma",
-    location: "Mumbai",
-    stars: 5,
-    text: "The bootcamp helped me build confidence for leadership presentations. The frameworks shared are extremely powerful.",
-  },
-  {
-    initial: "S",
-    name: "Sachin Gupta",
-    location: "Gurgaon",
-    stars: 5,
-    text: "Mridu's experience in moderating global leadership forums reflects in the way she trains professionals.",
-  },
-  {
-    initial: "P",
-    name: "Pooja Mehta",
-    location: "Bangalore",
-    stars: 5,
-    text: "I attended a leadership masterclass and it gave me clarity on personal branding and executive communication.",
-  },
-  {
-    initial: "K",
-    name: "Karan Malhotra",
-    location: "Chandigarh",
-    stars: 5,
-    text: "MentorLeap combines real leadership experience with structured frameworks. Highly recommended for professionals.",
-  },
-  {
-    initial: "N",
-    name: "Neha Kapoor",
-    location: "Hyderabad",
-    stars: 4,
-    text: "Very practical learning experience. The session on professional confidence was extremely valuable.",
-  },
-];
+import { fetchReviews } from "@/lib/api";
 
 function useInView(threshold = 0.1) {
   const ref = useRef<HTMLElement>(null);
@@ -81,12 +38,11 @@ function Stars({ count }: { count: number }) {
 }
 
 // rolling big number counter
-function RatingCounter({ visible }: { visible: boolean }) {
+function RatingCounter({ visible, target = 4.9 }: { visible: boolean; target?: number }) {
   const [val, setVal] = useState(0);
   useEffect(() => {
     if (!visible) return;
     let current = 0;
-    const target = 4.9;
     const steps = 40;
     const increment = target / steps;
     const timer = setInterval(() => {
@@ -95,18 +51,31 @@ function RatingCounter({ visible }: { visible: boolean }) {
       else setVal(parseFloat(current.toFixed(1)));
     }, 30);
     return () => clearInterval(timer);
-  }, [visible]);
+  }, [visible, target]);
   return <>{val.toFixed(1)}</>;
 }
 
 export default function ReviewsSection() {
   const { ref, visible } = useInView();
   const [hovered, setHovered] = useState<number | null>(null);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchReviews().then((data: any[]) => {
+      setReviews(data);
+      setLoading(false);
+    });
+  }, []);
 
   // avatar gradient colours cycling
   const avatarColors = [
     "#00e5ff", "#6366f1", "#00e5ff", "#6366f1", "#00e5ff", "#6366f1",
   ];
+
+  const averageRating = reviews.length > 0 
+    ? (reviews.reduce((acc, r) => acc + (r.stars || 5), 0) / reviews.length).toFixed(1)
+    : "0.0";
 
   return (
     <>
@@ -189,13 +158,13 @@ export default function ReviewsSection() {
               className="rating-number font-bold mb-2"
               style={{ fontSize: "56px", color: "#00e5ff" }}
             >
-              <RatingCounter visible={visible} />
+              <RatingCounter visible={visible} target={Number(averageRating)} />
             </h3>
             <div style={{ color: "#facc15", fontSize: "22px", marginBottom: "8px" }}>
               ★★★★★
             </div>
             <p style={{ color: "#94a3b8", fontSize: "14px" }}>
-              Based on 20+ professional reviews across India
+              Based on {reviews.length} professional reviews
             </p>
           </div>
         )}
@@ -203,14 +172,19 @@ export default function ReviewsSection() {
         {/* GRID */}
         <div
           className="mx-auto grid gap-8"
+          suppressHydrationWarning
           style={{
             maxWidth: "1200px",
-            gridTemplateColumns: "repeat(3, 1fr)",
+            gridTemplateColumns: loading || reviews.length === 0 ? "1fr" : "repeat(3, 1fr)",
           }}
         >
-          {reviews.map((r, i) => (
+          {loading ? (
+            <div className="text-[#94a3b8] animate-pulse py-20 bg-white/5 rounded-3xl border border-white/10">Synchronizing testimonials...</div>
+          ) : reviews.length === 0 ? (
+            <div className="text-[#94a3b8] italic py-20 bg-white/5 rounded-3xl border border-white/10">Be the first to share your experience with MentorLeap.</div>
+          ) : reviews.map((r, i) => (
             <div
-              key={r.name}
+              key={r.id || r.name}
               className="review-card relative rounded-xl text-left"
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
@@ -233,13 +207,13 @@ export default function ReviewsSection() {
                   style={{
                     width: "42px",
                     height: "42px",
-                    background: `linear-gradient(135deg, ${avatarColors[i]}, #020617)`,
-                    border: `2px solid ${avatarColors[i]}`,
-                    color: avatarColors[i],
+                    background: `linear-gradient(135deg, ${avatarColors[i % avatarColors.length]}, #020617)`,
+                    border: `2px solid ${avatarColors[i % avatarColors.length]}`,
+                    color: avatarColors[i % avatarColors.length],
                     fontSize: "16px",
                   }}
                 >
-                  {r.initial}
+                  {r.initial || (r.name ? r.name[0] : "?")}
                 </div>
                 <div>
                   <h4 className="text-white font-semibold" style={{ fontSize: "15px" }}>
@@ -252,7 +226,7 @@ export default function ReviewsSection() {
               </div>
 
               {/* STARS */}
-              <Stars count={r.stars} />
+              <Stars count={r.stars || 5} />
 
               {/* TEXT */}
               <p style={{ color: "#cbd5f5", fontSize: "14px", lineHeight: "1.6" }}>

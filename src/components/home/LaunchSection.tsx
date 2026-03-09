@@ -226,6 +226,7 @@ export default function LaunchSection() {
         <div
           className="mx-auto grid gap-10"
           style={{ maxWidth: "1100px", gridTemplateColumns: "repeat(2, 1fr)" }}
+          suppressHydrationWarning
         >
           {cards.map((card, i) => (
             <div
@@ -292,7 +293,7 @@ export default function LaunchSection() {
                   )}
                 </div>
 
-                <Link href="/signup" className="launch-btn">
+                <Link href="/auth/register" className="launch-btn">
                   {card.cta}
                 </Link>
               </div>

@@ -129,6 +129,7 @@ export default function Footer() {
       `}</style>
 
       <footer
+        suppressHydrationWarning
         style={{
           width: "100%",
           background: "#020617",
@@ -136,11 +137,12 @@ export default function Footer() {
         }}
       >
         {/* SHIMMER TOP LINE */}
-        <div className="footer-shimmer" />
+        <div className="footer-shimmer" suppressHydrationWarning />
 
         {/* MAIN ROW */}
         <div
           className="footer-inner"
+          suppressHydrationWarning
           style={{
             maxWidth: "1350px",
             margin: "auto",
@@ -153,6 +155,7 @@ export default function Footer() {
           {/* LOGO + NAV */}
           <div
             className="footer-nav-links"
+            suppressHydrationWarning
             style={{ display: "flex", alignItems: "center", gap: "24px" }}
           >
             {/* LOGO MARK */}
@@ -168,6 +171,7 @@ export default function Footer() {
 
             {/* DIVIDER */}
             <div
+              suppressHydrationWarning
               style={{
                 width: "1px",
                 height: "18px",
@@ -192,6 +196,7 @@ export default function Footer() {
           {/* SOCIAL */}
           <div
             className="footer-social-links"
+            suppressHydrationWarning
             style={{ display: "flex", gap: "6px", alignItems: "center" }}
           >
             {socialLinks.map((s) => (
@@ -213,6 +218,7 @@ export default function Footer() {
 
         {/* BOTTOM BAR */}
         <div
+          suppressHydrationWarning
           style={{
             borderTop: "1px solid rgba(255,255,255,0.05)",
             padding: "12px 20px",

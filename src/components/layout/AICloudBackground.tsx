@@ -108,7 +108,7 @@ export default function AICloudBackground() {
         }
       `}</style>
 
-      <div className="ai-cloud-bg">
+      <div className="ai-cloud-bg" suppressHydrationWarning>
         {words.map((word, i) => (
           <span
             key={word}

@@ -7,27 +7,24 @@ import {
     BookOpen,
     Calendar,
     Award,
-    MessageSquare,
+    Bot,
     User,
     Settings,
     LogOut,
-    Shield,
-    BarChart3
+    Shield
 } from "lucide-react";
 import { useAuth } from "@/components/providers/AuthProvider";
 
 const navItems = [
-    { label: 'Overview', href: '/dashboard', icon: LayoutDashboard },
-    { label: 'My Courses', href: '/dashboard/courses', icon: BookOpen },
-    { label: 'Events', href: '/dashboard/events', icon: Calendar },
+    { label: 'Overview', href: '/dashboard/overview', icon: LayoutDashboard },
+    { label: 'My Courses', href: '/dashboard/my-courses', icon: BookOpen },
+    { label: 'My Events', href: '/dashboard/my-events', icon: Calendar },
     { label: 'Certificates', href: '/dashboard/certificates', icon: Award },
-    { label: 'Messages', href: '/dashboard/messages', icon: MessageSquare },
-    { label: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
+    { label: 'AI Assistant', href: '/dashboard/ai-assistant', icon: Bot },
 ];
 
 const secondaryItems = [
     { label: 'Profile', href: '/dashboard/profile', icon: User },
-    { label: 'Settings', href: '/dashboard/settings', icon: Settings },
 ];
 
 export default function Sidebar() {

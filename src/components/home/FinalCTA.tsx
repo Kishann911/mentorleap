@@ -161,6 +161,7 @@ export default function FinalCTA() {
         <div
           className="relative mx-auto"
           style={{ maxWidth: "900px", zIndex: 2 }}
+          suppressHydrationWarning
         >
 
           {/* EYEBROW */}
@@ -246,7 +247,7 @@ export default function FinalCTA() {
               transition: "opacity 0.6s ease 0.5s, transform 0.6s ease 0.5s",
             }}
           >
-            <Link href="/signup" className="cta-btn-primary">
+            <Link href="/auth/register" className="cta-btn-primary">
               Join Free Course
             </Link>
             <Link href="/events" className="cta-btn-secondary">

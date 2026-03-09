@@ -110,20 +110,21 @@ export default function OfferBanner() {
 
       <div
         className="ml-banner-animate"
+        suppressHydrationWarning
         style={{
+          position: "relative",
           width: "100%",
           background: "rgba(255,255,255,0.05)",
           backdropFilter: "blur(12px)",
           borderTop: "1px solid rgba(255,255,255,0.08)",
           borderBottom: "1px solid rgba(255,255,255,0.08)",
           overflow: "hidden",
-          position: "relative",
-          // sits just below the fixed header
           marginTop: "70px",
         }}
       >
         {/* subtle gradient shimmer line at top */}
         <div
+          suppressHydrationWarning
           style={{
             position: "absolute",
             top: 0,
@@ -136,6 +137,7 @@ export default function OfferBanner() {
 
         <div
           className="ml-banner-inner"
+          suppressHydrationWarning
           style={{
             display: "flex",
             alignItems: "center",
@@ -149,8 +151,9 @@ export default function OfferBanner() {
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
             title="Hover to pause"
+            suppressHydrationWarning
           >
-            <div className={`ml-offer-track ${paused ? "paused" : ""}`}>
+            <div className={`ml-offer-track ${paused ? "paused" : ""}`} suppressHydrationWarning>
               {[0, 1].map((i) => (
                 <span key={i}>
                   <span style={{ color: "#94a3b8" }}>FREE </span>
@@ -176,6 +179,7 @@ export default function OfferBanner() {
           {/* BUTTONS */}
           <div
             className="ml-offer-actions"
+            suppressHydrationWarning
             style={{
               display: "flex",
               gap: "10px",
@@ -183,7 +187,7 @@ export default function OfferBanner() {
               flexShrink: 0,
             }}
           >
-            <Link href="/signup" className="ml-offer-btn1">
+            <Link href="/auth/register" className="ml-offer-btn1">
               Enroll Free Course
             </Link>
             <Link href="/events" className="ml-offer-btn2">

@@ -174,6 +174,7 @@ export default function CorporateSection() {
           <div
             className="grid gap-12 text-left"
             style={{ gridTemplateColumns: "repeat(2, 1fr)" }}
+            suppressHydrationWarning
           >
 
             {/* BENEFITS PANEL */}

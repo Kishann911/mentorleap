@@ -110,7 +110,7 @@ export default function JourneySection() {
         className="w-full px-5"
         style={{ padding: "140px 20px" }}
       >
-        <div className="mx-auto" style={{ maxWidth: "900px" }}>
+        <div className="mx-auto" style={{ maxWidth: "900px" }} suppressHydrationWarning>
 
           {/* TITLE */}
           <h2
