@@ -3,14 +3,15 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Helper functions
+    // ── Helper functions ─────────────────────────────────────────────────────
     function isSignedIn() {
       return request.auth != null;
     }
     
     function isAdmin() {
       return isSignedIn() && (
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin') ||
         request.auth.token.role == 'admin'
       );
     }
@@ -19,55 +20,104 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    // --- Users Collection ---
+    // ── Users Collection ──────────────────────────────────────────────────────
     match /users/{userId} {
+      // Users can read and update their own doc; admins can do everything
       allow read: if isOwner(userId) || isAdmin();
       allow create: if isSignedIn();
       allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+      // Allow admins to list all users
+      allow list: if isAdmin();
     }
 
-    // --- Courses Collection ---
+    // ── Courses Collection ────────────────────────────────────────────────────
     match /courses/{courseId} {
-      allow read: if true; // Publicly viewable
+      allow read, list: if true; // Publicly viewable
       allow write: if isAdmin();
     }
 
-    // --- Events Collection ---
+    // ── Events Collection ─────────────────────────────────────────────────────
     match /events/{eventId} {
-      allow read: if true; // Publicly viewable
-      allow update: if isSignedIn(); // For registering (attendees array union)
-      allow write: if isAdmin();
+      allow read, list: if true;                // Publicly viewable
+      allow update: if isSignedIn();             // For registering (attendees arrayUnion)
+      allow create, delete: if isAdmin();
     }
 
-    // --- Resources Collection ---
+    // ── Resources Collection ──────────────────────────────────────────────────
     match /resources/{resourceId} {
-      allow read: if isAdmin() || (
-        isSignedIn() && (
-          // Logic for purchased: item might be free or user has valid transaction
-          // For now, allow reading if signed in for demo, or refine with transaction check
-          true 
-        )
-      );
+      allow read, list: if true; // Publicly viewable catalog
       allow write: if isAdmin();
     }
 
-    // --- Certificates Collection ---
+    // ── Certificates Collection ───────────────────────────────────────────────
     match /certificates/{certId} {
-      allow read: if isSignedIn() && (isOwner(resource.data.userId) || isAdmin());
+      // Students can read their own certificates; admins can read all
+      allow read: if isSignedIn() && (
+        resource.data.userId == request.auth.uid || isAdmin()
+      );
+      // Allow signed-in users to list/query their own certificates
+      allow list: if isSignedIn();
       allow write: if isAdmin();
     }
 
-    // --- Transactions Collection ---
+    // ── Transactions Collection ───────────────────────────────────────────────
     match /transactions/{transId} {
-      allow read: if isSignedIn() && (isOwner(resource.data.userId) || isAdmin());
+      allow read: if isSignedIn() && (
+        resource.data.userId == request.auth.uid || isAdmin()
+      );
+      // Allow querying (list) own transactions
+      allow list: if isSignedIn();
       allow create: if isSignedIn();
       allow update: if isAdmin();
     }
 
-    // --- Blogs Collection ---
+    // ── Blogs Collection ──────────────────────────────────────────────────────
     match /blogs/{blogId} {
-      allow read: if true;
+      allow read, list: if true;
       allow write: if isAdmin();
+    }
+
+    // ── Categories Collection ─────────────────────────────────────────────────
+    match /categories/{catId} {
+      allow read, list: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── Additional Public Content ─────────────────────────────────────────────
+    match /blog_posts/{id} {
+      allow read, list: if true;
+      allow write: if isAdmin();
+    }
+    match /reviews/{id} {
+      allow read, list: if true;
+      allow write: if isAdmin();
+    }
+    match /faqs/{id} {
+      allow read, list: if true;
+      allow write: if isAdmin();
+    }
+    match /services/{id} {
+      allow read, list: if true;
+      allow write: if isAdmin();
+    }
+    match /site_settings/{id} {
+      allow read, list: if true;
+      allow write: if isAdmin();
+    }
+    match /coaching_programs/{id} {
+      allow read, list: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── Forms / Requests ──────────────────────────────────────────────────────
+    match /coachingRequests/{id} {
+      allow create: if true; // Anyone can submit a request
+      allow read, write: if isAdmin();
+    }
+    match /anchorRequests/{id} {
+      allow create: if true; // Anyone can submit a request
+      allow read, write: if isAdmin();
     }
   }
 }

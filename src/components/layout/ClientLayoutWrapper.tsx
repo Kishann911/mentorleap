@@ -20,7 +20,10 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
   const isAuthPath = pathname.startsWith("/auth") || pathname === "/auth/login" || pathname === "/auth/register";
   const isAdminPath = pathname.startsWith("/admin");
   const isDashboardPath = pathname.startsWith("/dashboard");
-  const isAppPath = isAdminPath || isDashboardPath || isAuthPath;
+  const isCoursePath = pathname.startsWith("/courses") || pathname.startsWith("/course-player");
+
+  // Clean app layouts without marketing elements
+  const isAppPath = isAdminPath || isDashboardPath || isAuthPath || isCoursePath;
 
   useEffect(() => {
     if (!loading && user && pathname === "/") {
@@ -28,8 +31,8 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
     }
   }, [user, isAdmin, loading, pathname, router]);
 
-  // For App/Admin/Auth paths: Clean layout without landing page elements
-  if (isAppPath) {
+  // For App/Admin/Auth/Course paths or ANY logged-in user: Clean layout without landing page elements
+  if (isAppPath || user) {
     return (
       <main className="min-h-screen bg-[#020617] relative">
         {children}

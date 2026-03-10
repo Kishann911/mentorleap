@@ -262,9 +262,45 @@ export default function CourseDetailPage() {
                 ))}
               </div>
 
-              <Button fullWidth size="lg" className="h-14 font-black uppercase tracking-[0.2em] shadow-[0_10px_25px_#00e5ff30]">
-                Enroll Performance
-              </Button>
+              {(!course.price || course.price === 0) ? (
+                <Button
+                  fullWidth size="lg"
+                  className="h-14 font-black uppercase tracking-[0.2em] shadow-[0_10px_25px_#00e5ff30]"
+                  onClick={async () => {
+                    try {
+                      const { auth } = await import('@/lib/firebase');
+                      const token = await auth.currentUser?.getIdToken();
+                      if (!token) {
+                        alert("Please log in to enroll.");
+                        return window.location.href = `/auth/login?redirect=/courses/${course.id}`;
+                      }
+
+                      const res = await fetch('/api/enroll/free', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ courseId: course.id })
+                      });
+                      if (res.ok) {
+                        window.location.href = `/course-player/${course.id}`;
+                      } else {
+                        const error = await res.json();
+                        alert(error.error || "Failed to enroll");
+                      }
+                    } catch (e) {
+                      console.error(e);
+                    }
+                  }}
+                >
+                  Enroll for Free
+                </Button>
+              ) : (
+                <Button fullWidth size="lg" disabled className="h-14 font-black uppercase tracking-[0.2em] bg-white/10 text-white/50 border-none">
+                  Enroll (Paid - Coming Soon)
+                </Button>
+              )}
 
               <p className="text-[9px] text-center text-[#475569] font-black uppercase tracking-widest mt-6">
                 🔒 Secure 256-bit SSL Enrollment

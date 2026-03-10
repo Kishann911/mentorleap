@@ -42,6 +42,12 @@ export default function CoursePlayerPage() {
   if (loading || isLoading) return <div className="h-screen flex items-center justify-center bg-[#020617]"><Loader /></div>;
   if (!course) return <div className="h-screen flex items-center justify-center bg-[#020617]"><div className="text-white text-xl">Course not found</div></div>;
 
+  // Access Control: Redirection if not enrolled or admin
+  if (userData && userData.role !== 'admin' && !userData.enrolledCourses?.includes(courseId as string)) {
+    router.push(`/courses/${courseId}`);
+    return <div className="h-screen flex items-center justify-center bg-[#020617]"><Loader /></div>;
+  }
+
   const currentLesson = course.modules?.flatMap((m: any) => m.lessons).find((l: any) => l.id === activeLessonId);
 
   return (
@@ -88,8 +94,8 @@ export default function CoursePlayerPage() {
                       key={lesson.id}
                       onClick={() => setActiveLessonId(lesson.id)}
                       className={`w-full text-left p-4 rounded-2xl transition-all group flex items-start gap-3 ${isActive
-                          ? 'bg-[#00e5ff]/10 border border-[#00e5ff]/20 shadow-[0_0_20px_rgba(0,229,255,0.05)]'
-                          : 'hover:bg-white/5 border border-transparent'
+                        ? 'bg-[#00e5ff]/10 border border-[#00e5ff]/20 shadow-[0_0_20px_rgba(0,229,255,0.05)]'
+                        : 'hover:bg-white/5 border border-transparent'
                         }`}
                     >
                       <div className={`mt-0.5 w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${isActive ? 'bg-[#00e5ff]/20 text-[#00e5ff]' : 'bg-white/5 text-[#475569]'

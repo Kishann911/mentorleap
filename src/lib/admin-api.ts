@@ -243,5 +243,27 @@ export const AdminAPI = {
         });
         if (!res.ok) throw new Error("Failed to delete event");
         return res.json();
-    }
+    },
+
+    // REVENUE
+    async getRevenue(range: "day" | "month" | "year" | "all" = "all") {
+        const headers = await getHeaders();
+        const res = await fetch(`/api/admin/revenue?range=${range}`, { headers });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({ error: "Failed to fetch revenue" }));
+            throw new Error(err.error || "Failed to fetch revenue");
+        }
+        return res.json();
+    },
+
+    // ADMIN STATS
+    async getStats() {
+        const headers = await getHeaders();
+        const res = await fetch("/api/admin/stats", { headers });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({ error: "Failed to fetch stats" }));
+            throw new Error(err.error || "Failed to fetch stats");
+        }
+        return res.json();
+    },
 };

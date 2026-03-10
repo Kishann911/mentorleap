@@ -3,18 +3,24 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/providers/AuthProvider";
 import Sidebar from "@/components/dashboard/Sidebar";
-import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import StudentHeader from "@/components/dashboard/StudentHeader";
 import { Loader } from "@/components/ui/Loader";
 
+import { isProfileComplete } from "@/utils/profileValidation";
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, userData, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (!loading && !user) {
       router.replace("/auth/login");
     }
-  }, [user, loading, router]);
+    // Route guard for Profile Setup
+    if (!loading && user && userData && !isProfileComplete(userData) && window.location.pathname !== '/dashboard/profile/setup') {
+      router.replace("/dashboard/profile/setup");
+    }
+  }, [user, userData, loading, router]);
 
   if (loading) {
     return (
@@ -34,7 +40,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* DASHBOARD CONTENT AREA */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* TOP DASHBOARD HEADER */}
-        <DashboardHeader />
+        <StudentHeader />
 
         {/* DYNAMIC PAGE CONTENT */}
         <main className="flex-1 overflow-y-auto bg-[#04091a] relative custom-scrollbar">

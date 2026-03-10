@@ -8,7 +8,7 @@ import { Toast } from "@/components/ui/Toast";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "firebase/auth";
 import { handleAuthError } from "@/lib/auth-errors";
 import { auth } from "@/lib/firebase";
 
@@ -18,6 +18,37 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ show: false, message: "", type: "success" as "success" | "error" });
+
+  const syncUserToFirestore = async (uid: string, name: string, email: string) => {
+    const res = await fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid, name, email }),
+    });
+  };
+
+  React.useEffect(() => {
+    const checkRedirect = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          const user = result.user;
+          try {
+            await syncUserToFirestore(user.uid, user.displayName || "Google User", user.email || "");
+          } catch (e) {
+            console.error("Failed to sync user", e);
+          }
+          setToast({ show: true, message: "Logged in with Google!", type: "success" });
+          const destination = user.email === "admin@mentorleap.com" ? "/admin" : "/dashboard";
+          router.push(destination);
+        }
+      } catch (error: any) {
+        const { message } = handleAuthError(error);
+        setToast({ show: true, message, type: "error" });
+      }
+    };
+    checkRedirect();
+  }, [router]);
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
@@ -41,16 +72,10 @@ export default function LoginPage() {
     const provider = new GoogleAuthProvider();
     setLoading(true);
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      setToast({ show: true, message: "Logged in with Google!", type: "success" });
-
-      const destination = user.email === "admin@mentorleap.com" ? "/admin" : "/dashboard";
-      router.push(destination);
+      await signInWithRedirect(auth, provider);
     } catch (error: any) {
       const { message } = handleAuthError(error);
       setToast({ show: true, message, type: "error" });
-    } finally {
       setLoading(false);
     }
   };

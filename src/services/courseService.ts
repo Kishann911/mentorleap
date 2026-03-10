@@ -32,8 +32,15 @@ export const CourseService = {
     },
 
     async getAllCourses() {
-        const snapshot = await db.collection("courses").orderBy("createdAt", "desc").get();
-        return snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }) as Course);
+        const snapshot = await db.collection("courses").get();
+        const courses = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }) as Course);
+
+        // In-memory sort to prevent dropping courses without a createdAt field
+        return courses.sort((a: any, b: any) => {
+            const timeA = a.createdAt?._seconds || a.createdAt?.toMillis?.() || 0;
+            const timeB = b.createdAt?._seconds || b.createdAt?.toMillis?.() || 0;
+            return timeB - timeA;
+        });
     },
 
     async addModule(courseId: string, module: Module) {

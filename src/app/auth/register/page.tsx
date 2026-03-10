@@ -8,7 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
-import { createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "firebase/auth";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -28,6 +28,26 @@ export default function SignupPage() {
     });
     if (!res.ok) throw new Error("Failed to save user data.");
   };
+
+  React.useEffect(() => {
+    const checkRedirect = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          const user = result.user;
+          try {
+            await syncUserToFirestore(user.uid, user.displayName || "Google User", user.email || "");
+          } catch (e) {
+            console.error("Failed to sync user", e);
+          }
+          router.push('/dashboard');
+        }
+      } catch (err: any) {
+        setError(err.message || "Google Sign-up failed");
+      }
+    };
+    checkRedirect();
+  }, [router]);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,14 +71,9 @@ export default function SignupPage() {
     const provider = new GoogleAuthProvider();
     setLoading(true);
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      // Also sync Google users to Firestore
-      await syncUserToFirestore(user.uid, user.displayName || "Google User", user.email || "");
-      router.push('/dashboard');
+      await signInWithRedirect(auth, provider);
     } catch (err: any) {
       setError(err.message || "Google Sign-up failed");
-    } finally {
       setLoading(false);
     }
   };
