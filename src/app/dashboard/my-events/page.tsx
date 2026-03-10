@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/Card";
 import { Loader } from "@/components/ui/Loader";
 import { Calendar, Clock, MapPin, Users, AlertTriangle, ExternalLink } from "lucide-react";
+import Link from "next/link";
 
 export default function MyEventsPage() {
     const [loading, setLoading] = useState(true);
@@ -116,8 +117,8 @@ export default function MyEventsPage() {
                                 key={f}
                                 onClick={() => setFilter(f)}
                                 className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${filter === f
-                                        ? "bg-[#00e5ff] text-black"
-                                        : "text-[#94a3b8] hover:text-white"
+                                    ? "bg-[#00e5ff] text-black"
+                                    : "text-[#94a3b8] hover:text-white"
                                     }`}
                             >
                                 {f}
@@ -156,11 +157,11 @@ export default function MyEventsPage() {
                             ? "You haven't registered for any events yet. Check out upcoming webinars and masterclasses."
                             : `You have no ${filter} events to show.`}
                     </p>
-                    <a href="/events">
+                    <Link href="/events" passHref>
                         <button className="px-6 py-2 bg-[#00e5ff] text-black font-bold uppercase tracking-widest text-xs rounded-xl hover:bg-white hover:text-black transition-colors">
                             Browse Events
                         </button>
-                    </a>
+                    </Link>
                 </Card>
             ) : (
                 <div className="grid md:grid-cols-2 gap-6">
@@ -187,8 +188,8 @@ export default function MyEventsPage() {
                                     )}
                                     <div className="absolute top-3 left-3">
                                         <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-lg ${isUpcoming
-                                                ? "bg-[#00e5ff]/90 text-black"
-                                                : "bg-black/60 text-[#94a3b8]"
+                                            ? "bg-[#00e5ff]/90 text-black"
+                                            : "bg-black/60 text-[#94a3b8]"
                                             }`}>
                                             {isUpcoming ? "Upcoming" : "Past"}
                                         </span>
