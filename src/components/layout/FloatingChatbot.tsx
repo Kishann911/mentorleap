@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { useAuth } from "@/components/providers/AuthProvider";
+import Link from "next/link";
 
 interface Message {
   role: "bot" | "user";
@@ -33,6 +35,7 @@ export default function FloatingChatbot() {
   const [greetingDone, setGreetingDone] = useState(false);
   const [typedGreeting, setTypedGreeting] = useState("");
   const [chatVisible, setChatVisible] = useState(false);
+  const { user, loading: authLoading } = useAuth();
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -75,6 +78,40 @@ export default function FloatingChatbot() {
   const send = async (text: string) => {
     const val = text.trim();
     if (!val || isTyping) return;
+
+    if (!user) {
+      const userMsg: Message = { role: "user", text: val };
+      setMessages((prev) => [...prev, userMsg]);
+      setInput("");
+      setIsTyping(true);
+      
+      setTimeout(() => {
+        const isGeneralHelp = val.toLowerCase().includes("help") || 
+                             val.toLowerCase().includes("what") || 
+                             val.toLowerCase().includes("who") || 
+                             val.toLowerCase().includes("mentorleap");
+
+        if (isGeneralHelp) {
+          setMessages((prev) => [
+            ...prev,
+            { 
+              role: "bot", 
+              text: "I can help with general info, but please login first to access the chatboard completely and get personalized advice." 
+            },
+          ]);
+        } else {
+          setMessages((prev) => [
+            ...prev,
+            { 
+              role: "bot", 
+              text: "Please login first to access the chatboard completely. I'd love to help you once you're signed in!" 
+            },
+          ]);
+        }
+        setIsTyping(false);
+      }, 600);
+      return;
+    }
 
     const userMsg: Message = { role: "user", text: val };
     setMessages((prev) => [...prev, userMsg]);
@@ -424,7 +461,13 @@ export default function FloatingChatbot() {
         {/* FLOAT ICON */}
         <button
           className="misha-float-icon"
-          onClick={() => setOpen((p) => !p)}
+          onClick={() => {
+            if (!user && !authLoading) {
+              alert("You need to login to access the chatbot");
+              return;
+            }
+            setOpen((p) => !p);
+          }}
           aria-label="Open MISHA chat"
           style={{
             width: "70px",

@@ -121,7 +121,20 @@ export default function AdminCourses() {
 
     try {
       setIsSubmitting(true);
-      await AdminAPI.updateCourse(editingCourse.id!, formData);
+      let thumbnailUrl = editingCourse.thumbnail;
+
+      if (thumbnail) {
+        showToast("Uploading new thumbnail...", "success");
+        const uploadRes = await AdminAPI.uploadMedia(thumbnail, "mentorleap/courses");
+        thumbnailUrl = uploadRes.url;
+      }
+
+      const updateData = {
+        ...formData,
+        thumbnail: thumbnailUrl
+      };
+
+      await AdminAPI.updateCourse(editingCourse.id!, updateData);
       showToast("Course updated successfully!", "success");
       setIsEditModalOpen(false);
       fetchInitialData();
@@ -403,6 +416,16 @@ export default function AdminCourses() {
                 {statuses.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] text-[#475569] font-black uppercase tracking-widest pl-1">Update Thumbnail (Optional)</label>
+            {editingCourse?.thumbnail && !thumbnail && (
+              <div className="mb-2 w-20 h-20 rounded-lg overflow-hidden border border-white/10">
+                <img src={editingCourse.thumbnail} alt="Current" className="w-full h-full object-cover" />
+              </div>
+            )}
+            <input type="file" accept="image/*" onChange={(e) => setThumbnail(e.target.files ? e.target.files[0] : null)} className="w-full text-xs text-[#cbd5f5] file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-white/10 file:text-white hover:file:bg-white/20 cursor-pointer" />
           </div>
 
           <Button fullWidth className="h-14 !mt-8 font-black uppercase tracking-[0.2em]" disabled={isSubmitting}>

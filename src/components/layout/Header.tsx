@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuth } from "@/components/providers/AuthProvider";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -19,6 +20,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     setMounted(true);
@@ -64,6 +66,19 @@ export default function Header() {
           box-shadow: 0 6px 20px rgba(0, 229, 255, 0.3);
           transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
           white-space: nowrap;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .ml-auth-link {
+          color: #cbd5f5;
+          font-size: 13px;
+          text-decoration: none;
+          transition: color 0.3s ease;
+          font-weight: 500;
+        }
+        .ml-auth-link:hover {
+          color: white;
         }
         .ml-cta-btn:hover {
           transform: translateY(-2px) scale(1.03);
@@ -193,13 +208,28 @@ export default function Header() {
                 opacity: mounted ? 1 : 0,
                 transform: mounted ? "translateX(0)" : "translateX(20px)",
                 transition: "opacity 0.5s ease 0.5s, transform 0.5s ease 0.5s",
+                display: "flex",
+                alignItems: "center",
+                gap: "20px"
               }}
               className="hidden-mobile"
               suppressHydrationWarning
             >
-              <Link href="/events" className="ml-cta-btn">
-                Explore Events
-              </Link>
+              {!loading && !user && (
+                <>
+                  <Link href="/auth/login" className="ml-auth-link">
+                    Log In
+                  </Link>
+                  <Link href="/auth/register" className="ml-cta-btn">
+                    Sign Up
+                  </Link>
+                </>
+              )}
+              {user && (
+                <Link href="/events" className="ml-cta-btn">
+                  Explore Events
+                </Link>
+              )}
             </div>
 
             {/* HAMBURGER - mobile only */}
@@ -247,9 +277,39 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
-            <Link href="/events" className="ml-cta-btn" style={{ textAlign: "center", marginTop: "8px" }}>
-              Explore Events
-            </Link>
+            
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "12px" }}>
+              {!loading && !user && (
+                <>
+                  <Link 
+                    href="/auth/login" 
+                    className="ml-auth-link"
+                    onClick={() => setMenuOpen(false)}
+                    style={{ textAlign: "center", padding: "10px" }}
+                  >
+                    Log In
+                  </Link>
+                  <Link 
+                    href="/auth/register" 
+                    className="ml-cta-btn"
+                    onClick={() => setMenuOpen(false)}
+                    style={{ textAlign: "center" }}
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
+              {user && (
+                <Link 
+                  href="/events" 
+                  className="ml-cta-btn" 
+                  onClick={() => setMenuOpen(false)}
+                  style={{ textAlign: "center" }}
+                >
+                  Explore Events
+                </Link>
+              )}
+            </div>
           </div>
         </div>
       </header>
