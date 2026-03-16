@@ -79,40 +79,6 @@ export default function FloatingChatbot() {
     const val = text.trim();
     if (!val || isTyping) return;
 
-    if (!user) {
-      const userMsg: Message = { role: "user", text: val };
-      setMessages((prev) => [...prev, userMsg]);
-      setInput("");
-      setIsTyping(true);
-      
-      setTimeout(() => {
-        const isGeneralHelp = val.toLowerCase().includes("help") || 
-                             val.toLowerCase().includes("what") || 
-                             val.toLowerCase().includes("who") || 
-                             val.toLowerCase().includes("mentorleap");
-
-        if (isGeneralHelp) {
-          setMessages((prev) => [
-            ...prev,
-            { 
-              role: "bot", 
-              text: "I can help with general info, but please login first to access the chatboard completely and get personalized advice." 
-            },
-          ]);
-        } else {
-          setMessages((prev) => [
-            ...prev,
-            { 
-              role: "bot", 
-              text: "Please login first to access the chatboard completely. I'd love to help you once you're signed in!" 
-            },
-          ]);
-        }
-        setIsTyping(false);
-      }, 600);
-      return;
-    }
-
     const userMsg: Message = { role: "user", text: val };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
@@ -471,13 +437,7 @@ export default function FloatingChatbot() {
         {/* FLOAT ICON */}
         <button
           className="misha-float-icon"
-          onClick={() => {
-            if (!user && !authLoading) {
-              alert("You need to login to access the chatbot");
-              return;
-            }
-            setOpen((p) => !p);
-          }}
+          onClick={() => setOpen((p) => !p)}
           aria-label="Open MISHA chat"
           style={{
             width: "70px",
