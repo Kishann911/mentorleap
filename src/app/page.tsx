@@ -9,6 +9,7 @@ import ReviewsSection     from "@/components/home/ReviewsSection";
 import LaunchSection      from "@/components/home/LaunchSection";
 import CorporateSection   from "@/components/home/CorporateSection";
 import FAQSection         from "@/components/home/FAQSection";
+import RecognitionSection from "@/components/home/RecognitionSection";
 import FinalCTA           from "@/components/home/FinalCTA";
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
       <JourneySection />
       <MishaSection />
       <IndustrySection />
+      <RecognitionSection />
       <ProgramsSection />
       <ReviewsSection />
       <LaunchSection />

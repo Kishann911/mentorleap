@@ -3,13 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 
 const navLinks = [
-  { label: "Executive Coaching", href: "/coaching" },
-  { label: "Live Events", href: "/events" },
-  { label: "Resource Library", href: "/resources" },
-  { label: "MentorLeap Studio", href: "/studio" },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Courses", href: "/courses" },
+  { label: "Services", href: "/services" },
   { label: "Hire Mridu", href: "/hire-anchor" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const socialLinks = [
@@ -41,6 +43,15 @@ const socialLinks = [
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
         <circle cx="12" cy="12" r="4" />
         <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
+      </svg>
+    ),
+  },
+  {
+    label: "X (Twitter)",
+    href: "https://x.com",
+    icon: (
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
       </svg>
     ),
   },
@@ -146,73 +157,72 @@ export default function Footer() {
           style={{
             maxWidth: "1350px",
             margin: "auto",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "18px 20px",
+            display: "grid",
+            gridTemplateColumns: "repeat(12, 1fr)",
+            gap: "40px",
+            padding: "80px 20px 60px",
           }}
         >
-          {/* LOGO + NAV */}
-          <div
-            className="footer-nav-links"
-            suppressHydrationWarning
-            style={{ display: "flex", alignItems: "center", gap: "24px" }}
-          >
-            {/* LOGO MARK */}
-            <Link href="/" style={{ display: "flex", alignItems: "center" }}>
+          {/* BRAND */}
+          <div className="md:col-span-3">
+            <Link href="/" style={{ display: "inline-block", marginBottom: "24px" }}>
               <Image
                 src="https://marktaleevents.com/mentorleap/wp-content/uploads/2026/03/WhatsApp-Image-2026-02-26-at-6.16.25-AM.jpeg"
                 alt="MentorLeap"
-                width={80}
-                height={28}
-                style={{ height: "28px", width: "auto", objectFit: "contain", opacity: 0.8 }}
+                width={120}
+                height={40}
+                style={{ height: "32px", width: "auto", objectFit: "contain" }}
               />
             </Link>
-
-            {/* DIVIDER */}
-            <div
-              suppressHydrationWarning
-              style={{
-                width: "1px",
-                height: "18px",
-                background: "rgba(255,255,255,0.1)",
-              }}
-            />
-
-            {/* NAV LINKS */}
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="footer-nav-link"
-                onMouseEnter={() => setHoveredNav(link.label)}
-                onMouseLeave={() => setHoveredNav(null)}
-              >
-                {link.label}
-              </Link>
-            ))}
+            <p className="text-slate-400 text-sm leading-relaxed">
+              AI-powered professional development platform helping professionals master communication and leadership.
+            </p>
           </div>
 
-          {/* SOCIAL */}
-          <div
-            className="footer-social-links"
-            suppressHydrationWarning
-            style={{ display: "flex", gap: "6px", alignItems: "center" }}
-          >
-            {socialLinks.map((s) => (
-              <Link
-                key={s.label}
-                href={s.href}
-                className="footer-social-link"
-                onMouseEnter={() => setHoveredSocial(s.label)}
-                onMouseLeave={() => setHoveredSocial(null)}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {s.icon}
-                {s.label}
-              </Link>
-            ))}
+          {/* QUICK LINKS */}
+          <div className="md:col-span-3">
+            <h4 className="text-white font-bold mb-6 text-sm tracking-widest uppercase">
+              MentorLeap
+            </h4>
+            <ul className="space-y-4 p-0 list-none">
+              <li><Link href="/about" className="footer-nav-link">About</Link></li>
+              <li><Link href="/events" className="footer-nav-link">Programs</Link></li>
+              <li><Link href="/corporate" className="footer-nav-link">Corporate Training</Link></li>
+              <li><Link href="/courses" className="footer-nav-link">Recorded Courses</Link></li>
+            </ul>
+          </div>
+
+          {/* SUPPORT */}
+          <div className="md:col-span-3">
+            <h4 className="text-white font-bold mb-6 text-sm tracking-widest uppercase">
+              Resources
+            </h4>
+            <ul className="space-y-4 p-0 list-none">
+              <li><Link href="/resources" className="footer-nav-link">Digital Resources</Link></li>
+              <li><Link href="/studio" className="footer-nav-link">MentorLeap Studio</Link></li>
+              <li><Link href="/privacy" className="footer-nav-link">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="footer-nav-link">Terms of Service</Link></li>
+            </ul>
+          </div>
+
+          {/* NEWSLETTER */}
+          <div className="md:col-span-3">
+            <h4 className="text-white font-bold mb-6 text-sm tracking-widest uppercase">
+              Stay Informed
+            </h4>
+            <p className="text-slate-400 text-sm mb-6 leading-relaxed">
+              Join the community for leadership insights.
+            </p>
+            <div className="flex gap-2">
+              <input 
+                type="email" 
+                placeholder="Email address"
+                className="bg-white/5 border border-white/10 rounded-full px-4 py-2 text-sm text-white w-full focus:outline-none focus:border-[#00e5ff]"
+              />
+              <button className="bg-[#00e5ff] text-[#020617] p-2 rounded-full hover:scale-105 transition-transform">
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
 

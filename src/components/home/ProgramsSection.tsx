@@ -117,140 +117,97 @@ export default function ProgramsSection() {
         </h2>
 
         {/* GRID */}
+        {!loading && events.length > 0 && (
+          <div
+            className="mx-auto grid gap-10"
+            suppressHydrationWarning
+            style={{
+              maxWidth: "1200px",
+              gridTemplateColumns: events.length === 1 ? "1fr" : "repeat(2, 1fr)",
+            }}
+          >
+            {events.slice(0, 2).map((event, i) => (
+              <div
+                key={event.id}
+                className={`relative rounded-2xl text-left ${i === 1 ? "premium-card-glow" : ""}`}
+                style={{
+                  background: "#020617",
+                  padding: "40px",
+                  border: i === 1 ? "1px solid #6366f1" : "1px solid rgba(255,255,255,0.08)",
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? "translateY(0)" : "translateY(40px)",
+                  transition: `opacity 0.6s ease ${0.2 + i * 0.15}s, transform 0.35s ease`,
+                }}
+              >
+                {i === 1 && (
+                  <div
+                    style={{
+                      top: "-12px",
+                      left: "20px",
+                      background: "#6366f1",
+                      color: "white",
+                      fontSize: "11px",
+                      padding: "6px 14px",
+                      borderRadius: "20px",
+                      fontWeight: 700,
+                      letterSpacing: "1px",
+                      position: "absolute",
+                    }}
+                  >
+                    BEST SELLER
+                  </div>
+                )}
+                {event.price === 0 && (
+                  <div
+                    style={{
+                      top: "-12px",
+                      left: "20px",
+                      background: "#22c55e",
+                      color: "white",
+                      fontSize: "11px",
+                      padding: "6px 14px",
+                      borderRadius: "20px",
+                      fontWeight: 700,
+                      letterSpacing: "1px",
+                      position: "absolute",
+                    }}
+                  >
+                    FREE
+                  </div>
+                )}
+                <h3 className="text-white font-bold mb-2" style={{ fontSize: "22px", marginTop: "8px" }}>
+                  {event.title}
+                </h3>
+                <p className="mb-4" style={{ color: i === 1 ? "#6366f1" : "#00e5ff", fontSize: "14px" }}>By {event.speaker || 'Mridu Bhandari'}</p>
+                <p className="mb-6" style={{ color: "#cbd5f5", fontSize: "14px", lineHeight: "1.6" }}>
+                  {event.description}
+                </p>
+                <div className="mb-4" style={{ height: "1px", background: "rgba(255,255,255,0.06)" }} />
+                <p className="font-semibold mb-3" style={{ color: "#00e5ff", fontSize: "14px" }}>
+                  📅 {event.date?._seconds ? new Date(event.date._seconds * 1000).toLocaleDateString() : new Date(event.date).toLocaleDateString()}
+                </p>
+                <p className="font-bold mb-6" style={{ color: "white", fontSize: "20px" }}>
+                  {event.price === 0 ? "FREE" : `₹${event.price}`}
+                </p>
+                <Link href={`/events/${event.id}`} className="program-btn">
+                  {event.price === 0 ? "Register Free" : "Secure Your Seat"}
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+
         <div
-          className="mx-auto grid gap-10"
-          suppressHydrationWarning
+          className="mt-16 text-center"
           style={{
-            maxWidth: "1200px",
-            gridTemplateColumns: loading || events.length === 0 ? "1fr" : "repeat(2, 1fr)",
+            opacity: visible ? 1 : 0,
+            transform: visible ? "translateY(0)" : "translateY(20px)",
+            transition: "opacity 0.6s ease 0.5s, transform 0.6s ease 0.5s",
           }}
         >
-          {loading ? (
-            <div className="text-[#94a3b8] animate-pulse py-20 bg-white/5 rounded-3xl border border-white/10">Synchronizing with event registry...</div>
-          ) : events.length === 0 ? (
-            <div className="text-[#94a3b8] italic py-20 bg-white/5 rounded-3xl border border-white/10">No live programs scheduled. Please check back later.</div>
-          ) : events.map((p, i) => (
-            <div
-              key={p.id}
-              className={`relative rounded-2xl text-left ${p.type === 'premium' ? "premium-card-glow" : ""}`}
-              onMouseEnter={() => setHovered(i)}
-              onMouseLeave={() => setHovered(null)}
-              style={{
-                background: "#020617",
-                padding: "40px",
-                border: p.type === 'premium'
-                  ? "1px solid #6366f1"
-                  : hovered === i
-                    ? "1px solid #00e5ff"
-                    : "1px solid rgba(255,255,255,0.08)",
-                transform: visible
-                  ? hovered === i
-                    ? "translateY(-10px)"
-                    : "translateY(0)"
-                  : "translateY(40px)",
-                boxShadow: hovered === i
-                  ? "0 25px 60px rgba(0,229,255,0.15)"
-                  : "none",
-                opacity: visible ? 1 : 0,
-                transition: `opacity 0.6s ease ${0.2 + i * 0.15}s, transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease`,
-              }}
-            >
-              {/* BADGE */}
-              {visible && (
-                <div
-                  className="badge-pop absolute"
-                  style={{
-                    top: "-12px",
-                    left: "20px",
-                    background: p.badgeColor || (p.price === 0 ? "#00e5ff" : "#6366f1"),
-                    color: p.price === 0 ? "#020617" : "white",
-                    fontSize: "11px",
-                    padding: "6px 14px",
-                    borderRadius: "20px",
-                    fontWeight: 700,
-                    letterSpacing: "1px",
-                  }}
-                >
-                  {p.badge || (p.price === 0 ? "FREE" : "PREMIUM")}
-                </div>
-              )}
-
-              {/* TITLE */}
-              <h3
-                className="text-white font-bold mb-2"
-                style={{ fontSize: "22px", marginTop: "8px" }}
-              >
-                {p.title}
-              </h3>
-
-              {/* HOST */}
-              <p
-                className="mb-4"
-                style={{ color: "#00e5ff", fontSize: "14px" }}
-              >
-                {p.speaker || "By Mridu Bhandari"}
-              </p>
-
-              {/* DESC */}
-              <p
-                className="mb-5"
-                style={{ color: "#94a3b8", lineHeight: "1.6", fontSize: "14px" }}
-              >
-                {p.description}
-              </p>
-
-              {/* FEATURES */}
-              {p.features && (
-                <ul className="mb-5" style={{ listStyle: "none", padding: 0 }}>
-                  {p.features.map((f: string, fi: number) => (
-                    <li
-                      key={fi}
-                      className="program-li mb-2"
-                      style={{
-                        color: "#cbd5f5",
-                        fontSize: "14px",
-                        opacity: visible ? 1 : 0,
-                        transform: visible ? "translateX(0)" : "translateX(-10px)",
-                        transition: `opacity 0.4s ease ${0.4 + i * 0.1 + fi * 0.07}s, transform 0.4s ease ${0.4 + i * 0.1 + fi * 0.07}s`,
-                      }}
-                    >
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-              )}
-
-              {/* DIVIDER */}
-              <div
-                className="mb-4"
-                style={{
-                  height: "1px",
-                  background: "rgba(255,255,255,0.06)",
-                }}
-              />
-
-              {/* DATE */}
-              <p
-                className="font-semibold mb-3"
-                style={{ color: "#00e5ff", fontSize: "14px" }}
-              >
-                📅 {p.date ? (p.date._seconds ? new Date(p.date._seconds * 1000).toLocaleDateString() : (p.date.seconds ? new Date(p.date.seconds * 1000).toLocaleDateString() : String(p.date))) : "TBD"}
-              </p>
-
-              {/* PRICE */}
-              <p
-                className="font-bold mb-3"
-                style={{ color: "white", fontSize: "20px" }}
-              >
-                {p.price === 0 ? "FREE" : `₹${p.price}`}
-              </p>
-
-              {/* CTA */}
-              <Link href={`/events/${p.id}`} className="program-btn">
-                Reserve Seat
-              </Link>
-            </div>
-          ))}
+          <Link href="/courses" className="text-[#94a3b8] font-bold text-sm hover:text-[#00e5ff] transition-colors flex items-center justify-center gap-2 group">
+            Check out all Professional Programs <span className="group-hover:translate-x-1 transition-transform">→</span>
+          </Link>
         </div>
       </section>
     </>

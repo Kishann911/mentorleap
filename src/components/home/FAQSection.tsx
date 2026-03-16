@@ -134,15 +134,15 @@ export default function FAQSection() {
           suppressHydrationWarning
           style={{ maxWidth: "900px", gap: "18px" }}
         >
-          {loading ? (
-             <div className="text-[#94a3b8] animate-pulse py-10 bg-white/5 rounded-2xl border border-white/10">Synchronizing knowledge base...</div>
-          ) : faqs.length === 0 ? (
-             <div className="text-[#94a3b8] italic py-10 bg-white/5 rounded-2xl border border-white/10">No questions found. Contact support for assistance.</div>
-          ) : faqs.map((faq, i) => {
+          {[
+            { q: "What is MentorLeap?", a: "MentorLeap is an AI-powered professional development platform founded by Mridu Bhandari. It combines real-world leadership frameworks with MISHA — an intelligent mentorship assistant designed to help professionals master communication, confidence, and career growth." },
+            { q: "How does MISHA help learners?", a: "MISHA (Mentorship & Intelligence for Strategic Human Advancement) provides 24×7 support by helping you structure your narrative, increase visibility, and strengthen your professional voice. Whether you are preparing for high-stakes meetings or seeking career clarity, MISHA offers instant, intelligence-driven guidance." },
+            { q: "Is there a certificate for the programs?", a: "Yes, every professional program at MentorLeap, including our bootcamps and masterclasses, comes with a verified Certificate of Completion. These certificates recognize your commitment to strategic leadership and advanced communication skills." }
+          ].map((faq, i) => {
             const isOpen = openIndex === i;
             return (
               <div
-                key={faq.id || faq.q}
+                key={faq.q}
                 className={`faq-card rounded-2xl text-left ${isOpen ? "active-card" : ""}`}
                 onClick={() => toggle(i)}
                 onMouseEnter={() => setHovered(i)}
@@ -178,13 +178,13 @@ export default function FAQSection() {
                       color: isOpen ? "white" : "#e2e8f0",
                     }}
                   >
-                    {faq.q || faq.question}
+                    {faq.q}
                   </span>
 
                   <div className={`faq-chevron ${isOpen ? "open" : ""}`} />
                 </div>
 
-                {/* ANSWER — smooth height via grid trick */}
+                {/* ANSWER */}
                 <div className={`faq-answer-wrap ${isOpen ? "open" : ""}`}>
                   <div className="faq-answer-inner">
                     <p
@@ -198,7 +198,7 @@ export default function FAQSection() {
                         marginTop: "16px",
                       }}
                     >
-                      {faq.a || faq.answer}
+                      {faq.a}
                     </p>
                   </div>
                 </div>

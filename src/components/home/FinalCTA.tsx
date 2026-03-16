@@ -185,20 +185,21 @@ export default function FinalCTA() {
             </span>
           </div>
 
-          {/* TITLE */}
+          {/* HEADING */}
           <h2
-            className="text-white font-bold mb-4"
+            className="text-white font-bold mb-8"
             style={{
-              fontSize: "48px",
-              lineHeight: "1.15",
+              fontSize: "44px",
+              lineHeight: "1.2",
               opacity: visible ? 1 : 0,
-              transform: visible ? "translateY(0)" : "translateY(20px)",
-              transition: "opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s",
+              transform: visible ? "translateY(0)" : "translateY(-10px)",
+              transition: "opacity 0.6s ease 0.1s, transform 0.6s ease 0.1s",
             }}
           >
-            Ready to Begin Your{" "}
-            <span className="cta-gradient-text">Transformation?</span>
+            Ready to Master the{" "}
+            <span className="cta-gradient-text">Language of Leadership?</span>
           </h2>
+
 
           {/* PARAGRAPH */}
           <p
@@ -228,8 +229,9 @@ export default function FinalCTA() {
             }}
           >
             {[
-              "Free Personality Development Course — 15 March 2026",
-              "Leadership Bootcamp — 28–29 March 2026",
+              "Expert Led Communication Mastery",
+              "AI-Powered Personalized Growth",
+              "Global Professional Community"
             ].map((item) => (
               <div key={item} className="cta-highlight-item">
                 <span className="cta-highlight-dot" />
@@ -240,21 +242,30 @@ export default function FinalCTA() {
 
           {/* BUTTONS */}
           <div
-            className="flex justify-center flex-wrap gap-5"
+            className="flex flex-wrap justify-center gap-5"
             style={{
               opacity: visible ? 1 : 0,
-              transform: visible ? "translateY(0)" : "translateY(16px)",
-              transition: "opacity 0.6s ease 0.5s, transform 0.6s ease 0.5s",
+              transform: visible ? "scale(1)" : "scale(0.95)",
+              transition: "opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s",
             }}
           >
-            <Link href="/auth/register" className="cta-btn-primary">
-              Join Free Course
+            <Link
+              href="/courses/speak-with-impact-bootcamp"
+              className="px-10 py-4 bg-[#00e5ff] text-[#020617] font-bold rounded-full hover:shadow-[0_0_30px_rgba(0,229,255,0.4)] transition-all no-underline"
+            >
+              Secure Your Seat
             </Link>
-            <Link href="/events" className="cta-btn-secondary">
-              Register Bootcamp
+            <Link
+              href="/events/speak-with-impact-bootcamp"
+              className="px-10 py-4 bg-white/5 text-white font-bold rounded-full border border-white/10 hover:bg-white/10 transition-all no-underline"
+            >
+              Explore Bootcamp Details
             </Link>
-            <Link href="/hire-anchor" className="cta-btn-outline">
-              Hire Mridu for Event
+            <Link
+              href="/hire-anchor"
+              className="px-10 py-4 border border-[#00e5ff] text-[#00e5ff] font-bold rounded-full hover:bg-[#00e5ff]/5 transition-all no-underline"
+            >
+              Hire Mridu as Anchor
             </Link>
           </div>
 

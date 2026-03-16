@@ -105,37 +105,27 @@ export default function HeroSection() {
               className="text-white font-bold mb-5"
               style={{ fontSize: "48px", lineHeight: "1.2" }}
             >
-              The Future of Professional Growth{" "}
-              <span className="hero-gradient-text">
-                Starts with MentorLeap
-              </span>
+              Hello, I’m Mridu Bhandari.
             </h1>
+
+            {/* SUBHEADING */}
+            <h2
+              className="text-white font-medium mb-5"
+              style={{ fontSize: "24px", color: "#00e5ff" }}
+            >
+              Communication coach, Founder and Chief Mentor of MentorLeap.
+            </h2>
 
             {/* PARAGRAPH */}
             <p
               className="mb-6"
               style={{ color: "#cbd5f5", fontSize: "16px", lineHeight: "1.7" }}
             >
-              MentorLeap is an AI-powered professional development platform
-              founded by Mridu Bhandari. Learn leadership communication,
-              confidence frameworks and career growth strategies supported by
-              MISHA — your AI mentor.
+              As a TV journalist and anchor for over 2 decades, I have moderated conversations with CEOs, policymakers and global leaders across industries.
+              Many talented professionals struggle not because they lack knowledge but because they lack clarity in communication and structured thinking.
+              MentorLeap aims to bridge this gap.
+              It is an AI-powered learning platform designed to help professionals communicate ideas with clarity, build confidence in conversations and develop leadership presence.
             </p>
-
-            {/* HIGHLIGHT */}
-            <div
-              className="mb-8 flex flex-col gap-1"
-              style={{
-                color: "#00e5ff",
-                fontSize: "14px",
-                opacity: visible ? 1 : 0,
-                transform: visible ? "translateY(0)" : "translateY(10px)",
-                transition: "opacity 0.6s ease 0.4s, transform 0.6s ease 0.4s",
-              }}
-            >
-              <span>🎓 Free Personality Development Course — 15 March</span>
-              <span>🚀 Bootcamp Experience — 28–29 March</span>
-            </div>
 
             {/* CTA BUTTONS */}
             <div
@@ -147,20 +137,20 @@ export default function HeroSection() {
               }}
             >
               <Link
-                href="/auth/register"
+                href="/courses/speak-with-impact-bootcamp"
                 className="cta-primary text-white no-underline text-sm rounded-full px-6 py-3"
               >
-                Join Free Course
+                Secure Your Seat
               </Link>
               <Link
-                href="/events"
+                href="/events/speak-with-impact-bootcamp"
                 className="cta-secondary text-white no-underline text-sm rounded-full px-6 py-3"
                 style={{
                   background: "#0f172a",
                   border: "1px solid rgba(255,255,255,0.1)",
                 }}
               >
-                Bootcamp Details
+                Explore Bootcamp Details
               </Link>
               <Link
                 href="/hire-anchor"
@@ -170,7 +160,7 @@ export default function HeroSection() {
                   color: "#00e5ff",
                 }}
               >
-                Hire Mridu
+                Hire Mridu as Anchor
               </Link>
             </div>
           </div>

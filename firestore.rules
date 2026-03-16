@@ -68,7 +68,11 @@ service cloud.firestore {
       );
       // Allow querying (list) own transactions
       allow list: if isSignedIn();
-      allow create: if isSignedIn();
+      // SECURITY: Transactions should ideally only be created via Admin SDK after webhook/validation.
+      // If allowing client create, we must ensure status is always 'pending' and userId is correct.
+      allow create: if isSignedIn() && 
+                    request.resource.data.userId == request.auth.uid && 
+                    request.resource.data.paymentStatus == 'pending';
       allow update: if isAdmin();
     }
 

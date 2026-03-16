@@ -198,8 +198,8 @@ export default function Header() {
               className="hidden-mobile"
               suppressHydrationWarning
             >
-              <Link href="/auth/register" className="ml-cta-btn">
-                Join Free Course
+              <Link href="/events" className="ml-cta-btn">
+                Explore Events
               </Link>
             </div>
 
@@ -248,8 +248,8 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
-            <Link href="/auth/register" className="ml-cta-btn" style={{ textAlign: "center", marginTop: "8px" }}>
-              Join Free Course
+            <Link href="/events" className="ml-cta-btn" style={{ textAlign: "center", marginTop: "8px" }}>
+              Explore Events
             </Link>
           </div>
         </div>

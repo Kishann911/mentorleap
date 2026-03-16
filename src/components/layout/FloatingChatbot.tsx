@@ -8,20 +8,22 @@ interface Message {
   text: string;
 }
 
-const SUGGESTIONS = ["Free Course", "Bootcamp", "Corporate Training"];
+const SUGGESTIONS = ["Live Events", "Premium Courses", "Executive Coaching", "Corporate Training"];
 
 const BOT_REPLIES: Record<string, string> = {
-  "free course":
-    "🎓 The Free Personality Development Course by Mridu Bhandari launches on 15 March 2026. Worth ₹2999 — completely free! Click 'Enroll Free' to reserve your seat.",
-  bootcamp:
-    "🚀 The Professional Transformation Bootcamp runs 28–29 March 2026. Worth ₹7999. 10 lucky participants get FREE access and the next 50 get 50% off!",
+  "live events":
+    "🚀 Join our high-impact live learning experiences designed for rapid skill acquisition and networking. Check the 'Live Events' page for upcoming bootcamps.",
+  "premium courses":
+    "🎓 Explore our comprehensive library of elite communication, leadership, and personal branding programs. Visit the 'Explore Courses' section to begin.",
+  "executive coaching":
+    "👑 Master executive presence with 1-on-1 coaching from Mridu Bhandari. Perfect for leaders and founders looking to scale their influence.",
   "corporate training":
     "🏢 MentorLeap offers high-impact corporate leadership training for teams and executives. Reach out via the Contact section to book a session with Mridu.",
 };
 
 const GREETING: Message = {
   role: "bot",
-  text: "Hi, I'm MISHA 👋\nYour AI Mentor at MentorLeap.\nHow can I help you today?",
+  text: "Hi, I'm MISHA 👋\nYour AI Mentor at MentorLeap. I can help you find high-impact courses, upcoming live events, or executive coaching programs.\nHow can I help you today?",
 };
 
 export default function FloatingChatbot() {

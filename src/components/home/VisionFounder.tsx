@@ -6,8 +6,9 @@ import Image from "next/image";
 import { fetchFounderInfo } from "@/lib/api";
 
 const defaultStats = [
-  { target: 15,    label: "Years Experience" },
-  { target: 500,   label: "Corporate Events" },
+  { target: 20,    label: "Years Broadcast Media Experience" },
+  { target: 900,   label: "Corporate & Leadership Events Anchored" },
+  { target: 250,   label: "Hours Coaching Senior Leaders" },
   { target: 10000, label: "Professionals Impacted" },
 ];
 
@@ -193,8 +194,7 @@ export default function VisionFounder() {
                 className="text-white font-bold mb-4"
                 style={{ fontSize: "46px", lineHeight: "1.2" }}
               >
-                The Vision Behind{" "}
-                <span className="vision-gradient-text">MentorLeap</span>
+                Hi, I’m Mridu Bhandari.
               </h2>
 
               <p

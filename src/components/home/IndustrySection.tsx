@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { Reveal } from "@/components/ui/Animation";
 
 const cards = [
   {
@@ -232,6 +235,33 @@ export default function IndustrySection() {
             </div>
           ))}
         </div>
+        {/* HIRE MRIDU AS ANCHOR */}
+        <Reveal delay={0.4}>
+          <div className="mt-32 p-12 rounded-[40px] bg-white/[0.02] border border-white/5 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
+              <div className="w-full h-full bg-gradient-to-l from-[#00e5ff] to-transparent" />
+            </div>
+            
+            <div className="relative z-10 max-w-[800px] mx-auto text-center">
+                {/* TITLE & CONTENT */}
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                  Hire Mridu as <span className="text-[#00e5ff]">Anchor</span>
+                </h2>
+                <p className="text-[#94a3b8] text-lg leading-relaxed mb-8">
+                  As an experienced TV journalist and lifestyle anchor, Mridu brings professional polish, high energy and deep expertise to live events, corporate conferences and moderated panels. Her ability to navigate complex discussions with ease makes her the perfect choice for high-impact professional stage and screen engagements.
+                </p>
+
+                {/* CTA BUTTON */}
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-[#00e5ff] text-[#020617] font-bold rounded-full hover:shadow-[0_0_20px_rgba(0,229,255,0.4)] transition-all group no-underline"
+                >
+                  Book a Discovery Call
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+            </div>
+          </div>
+        </Reveal>
       </section>
     </>
   );

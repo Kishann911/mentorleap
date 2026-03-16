@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = "force-dynamic";
 import React, { useState, useEffect } from "react";
 import PageWrapper from "@/components/layout/PageWrapper";
 import { Reveal, FadeIn } from "@/components/ui/Animation";

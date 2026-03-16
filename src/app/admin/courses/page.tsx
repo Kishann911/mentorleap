@@ -184,7 +184,7 @@ export default function AdminCourses() {
       <div className="flex justify-between items-end mb-10">
         <div>
           <h1 className="text-3xl font-black mb-2">Curriculum Control</h1>
-          <p className="text-[#94a3b8] text-sm uppercase font-bold tracking-widest">50 Courses across 10 Masterclass Categories</p>
+          <p className="text-[#94a3b8] text-sm uppercase font-bold tracking-widest">{courses.length} Courses across {dbCategories.length} Professional Categories</p>
         </div>
         <div className="flex gap-4">
           <div className="flex gap-2 bg-white/5 p-1 rounded-xl border border-white/10">

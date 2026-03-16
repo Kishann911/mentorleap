@@ -20,7 +20,6 @@ const navItems = [
     { label: 'Admin Dashboard', href: '/admin', icon: ShieldCheck },
     { label: 'User Management', href: '/admin/users', icon: Users },
     { label: 'Blog CMS', href: '/admin/blog', icon: BookOpen },
-    { label: 'Taxonomy', href: '/admin/categories', icon: Layers },
     { label: 'Curriculum', href: '/admin/courses', icon: BookOpen },
     { label: 'Events & Live', href: '/admin/events', icon: Calendar },
     { label: 'Products', href: '/admin/products', icon: Package },

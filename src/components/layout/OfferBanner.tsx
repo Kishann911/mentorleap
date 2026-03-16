@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const offerText =
-  "FREE Personality Development Course by Mridu Bhandari — Launching 15 March 2026 (Worth ₹2999)  •  Bootcamp 28–29 March (Worth ₹7999)  •  10 Lucky Participants Get Bootcamp FREE  •  Next 50 Participants Get 50% Discount";
+  "MentorLeap Launch – 15 March 2026  •  Free Personality Development Masterclass by Mridu Bhandari (Worth ₹2999)  •  Speak with Impact Bootcamp – 28–29 March 2026 (Worth ₹7999)  •  10 Lucky Participants Get Bootcamp FREE  •  Next 50 Participants Get 50 percent Discount";
 
 export default function OfferBanner() {
   const [mounted, setMounted] = useState(false);
@@ -154,44 +154,45 @@ export default function OfferBanner() {
             suppressHydrationWarning
           >
             <div className={`ml-offer-track ${paused ? "paused" : ""}`} suppressHydrationWarning>
-              {[0, 1].map((i) => (
-                <span key={i}>
-                  <span style={{ color: "#94a3b8" }}>FREE </span>
-                  <span className="highlight">Personality Development Course</span>
-                  <span style={{ color: "#e2e8f0" }}> by Mridu Bhandari — </span>
-                  <span style={{ color: "#00e5ff" }}>Launching 15 March 2026</span>
-                  <span style={{ color: "#94a3b8" }}> (Worth ₹2999)  •  </span>
-                  <span style={{ color: "#e2e8f0" }}>Bootcamp </span>
-                  <span style={{ color: "#00e5ff" }}>28–29 March</span>
-                  <span style={{ color: "#94a3b8" }}> (Worth ₹7999)  •  </span>
-                  <span className="highlight">10 Lucky Participants</span>
-                  <span style={{ color: "#94a3b8" }}> Get Bootcamp FREE  •  </span>
-                  <span style={{ color: "#e2e8f0" }}>Next </span>
-                  <span className="highlight">50 Participants</span>
-                  <span style={{ color: "#e2e8f0" }}> Get </span>
-                  <span style={{ color: "#00e5ff" }}>50% Discount</span>
-                  <span style={{ color: "#94a3b8", marginLeft: "60px" }}>{"  "}</span>
-                </span>
-              ))}
+              <div className="flex items-center gap-12 whitespace-nowrap animate-marquee">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="flex items-center gap-12">
+                    <div className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#00e5ff] animate-pulse" />
+                      <span className="text-white/90 text-sm font-bold tracking-wide">
+                        MentorLeap Launch – 15 March 2026
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#6366f1] animate-pulse" />
+                      <span className="text-white/90 text-sm font-bold tracking-wide">
+                        Speak with Impact Bootcamp – 28–29 March 2026 (Worth ₹7999)
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#00e5ff] animate-pulse" />
+                      <span className="text-white/90 text-sm font-bold tracking-wide">
+                        10 Lucky Participants Get Bootcamp FREE
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* BUTTONS */}
-          <div
-            className="ml-offer-actions"
-            suppressHydrationWarning
-            style={{
-              display: "flex",
-              gap: "10px",
-              marginLeft: "24px",
-              flexShrink: 0,
-            }}
-          >
-            <Link href="/auth/register" className="ml-offer-btn1">
-              Enroll Free Course
+          <div className="flex items-center gap-4 ml-8">
+            <Link
+              href="/courses/speak-with-impact-bootcamp"
+              className="px-4 py-1.5 bg-[#00e5ff] text-[#020617] text-xs font-bold rounded-full hover:shadow-[0_0_15px_rgba(0,229,255,0.4)] transition-all no-underline"
+            >
+              Secure Your Seat
             </Link>
-            <Link href="/events" className="ml-offer-btn2">
-              Bootcamp Details
+            <Link
+              href="/events/speak-with-impact-bootcamp"
+              className="px-4 py-1.5 bg-white/10 text-white text-xs font-bold rounded-full border border-white/20 hover:bg-white/20 transition-all no-underline"
+            >
+              View Bootcamp Details
             </Link>
           </div>
         </div>

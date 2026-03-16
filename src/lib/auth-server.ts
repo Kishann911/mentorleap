@@ -16,7 +16,8 @@ export async function verifyAdmin(req: NextRequest) {
         if (decodedToken.role === "admin") return decodedToken;
 
         // 2. Fallback: Check hardcoded super-admin email
-        if (decodedToken.email?.toLowerCase() === "admin@mentorleap.com") {
+        const adminEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || "admin@mentorleap.com";
+        if (decodedToken.email?.toLowerCase() === adminEmail.toLowerCase()) {
             // Upgrade them to admin role in custom claims for future requests
             await auth.setCustomUserClaims(decodedToken.uid, { role: "admin" });
             return decodedToken;

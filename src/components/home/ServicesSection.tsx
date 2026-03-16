@@ -106,8 +106,7 @@ export default function ServicesSection() {
               transition: "opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s",
             }}
           >
-            Programs designed to transform professionals into confident
-            communicators and strategic leaders.
+            MentorLeap provides structured learning programs designed to help professionals achieve confident communication, leadership thinking and enhanced executive presence.
           </p>
 
           {/* GRID */}
@@ -118,13 +117,16 @@ export default function ServicesSection() {
               gridTemplateColumns: loading || services.length === 0 ? "1fr" : "repeat(3, 1fr)",
             }}
           >
-            {loading ? (
-               <div className="text-[#94a3b8] animate-pulse py-20 bg-white/5 rounded-3xl border border-white/10">Orchestrating service portfolio...</div>
-            ) : services.length === 0 ? (
-               <div className="text-[#94a3b8] italic py-20 bg-white/5 rounded-3xl border border-white/10">No specific services listed currently. Please contact us for custom inquiries.</div>
-            ) : services.map((s, i) => (
+            {[
+              { title: "Executive Coaching", icon: "👔", desc: "Hyper-personalised 1:1 coaching designed for senior professionals, founders and leaders who want to improve public speaking, communication, leadership presence or media readiness." },
+              { title: "Corporate Training", icon: "🏢", desc: "Customised training programs and workshops designed for organisations that want to strengthen communication, leadership conversations and structured thinking across teams." },
+              { title: "Live Online Events", icon: "🌐", desc: "Interactive masterclasses, bootcamps and cohorts for public speaking, leadership communication and executive presence - transforming professionals through applied learning." },
+              { title: "Recorded Courses", icon: "🎥", desc: "Self-paced learning programs that help professionals build communication frameworks and leadership thinking at their own pace." },
+              { title: "Digital Resources", icon: "📄", desc: "Frameworks, playbooks, worksheets and structured learning tools designed to help professionals strengthen communication and professional growth." },
+              { title: "Mentorleap Studio", icon: "🎙", desc: "Your one-stop hub for articles, insights, content into everything that’s changing at the modern global workplace – helping you become future-ready." }
+            ].map((s, i) => (
               <div
-                key={s.id || s.title}
+                key={s.title}
                 className="service-card rounded-2xl text-left"
                 onMouseEnter={() => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
@@ -154,10 +156,10 @@ export default function ServicesSection() {
                   {s.title}
                 </h3>
                 <p className="mb-4" style={{ color: "#94a3b8", fontSize: "14px" }}>
-                  {s.description || s.desc}
+                  {s.desc}
                 </p>
-                <Link href={s.link || "/contact"} className="service-card-link">
-                  {s.cta || "Learn More"}
+                <Link href="/contact" className="service-card-link">
+                  Learn More
                 </Link>
               </div>
             ))}

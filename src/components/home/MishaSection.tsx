@@ -5,10 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 const capabilities = [
-  "24×7 Learning Support",
-  "Interview Preparation",
-  "Presentation & PPT Assistance",
-  "Career Growth Guidance",
+  "Simulate interviews",
+  "Refine investor pitches",
+  "Practice speeches & presentations",
+  "Boardroom conversations prep",
+  "Executive articulation",
+  "Strategic visibility",
 ];
 
 const TYPING_TEXT = "Hi, I'm MISHA — your AI mentor at MentorLeap.";
@@ -203,6 +205,19 @@ export default function MishaSection() {
               Meet <span className="misha-gradient-text">MISHA</span>
             </h2>
 
+            <p className="text-[#94a3b8] mb-6 text-sm">
+              MentorLeap’s proprietary AI leadership engine, designed to support professionals throughout their learning journeys. She is structured around MentorLeap’s five-part leadership philosophy:
+            </p>
+
+            {/* PHILOSOPHY */}
+            <div className="grid gap-2 mb-6 mt-4">
+              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">M –</span> <span className="text-[#cbd5f5]">Master your narrative</span></div>
+              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">I –</span> <span className="text-[#cbd5f5]">Increase your visibility</span></div>
+              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">S –</span> <span className="text-[#cbd5f5]">Strengthen your voice</span></div>
+              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">H –</span> <span className="text-[#cbd5f5]">Humanise your leadership</span></div>
+              <div className="flex gap-3"><span className="text-[#00e5ff] font-bold">A –</span> <span className="text-[#cbd5f5]">Accelerate your growth</span></div>
+            </div>
+
             {/* FULL FORM */}
             <h3
               className="font-medium mb-4"
@@ -223,25 +238,19 @@ export default function MishaSection() {
             </h4>
 
             {/* PARAGRAPHS */}
-            {[
-              "MISHA is the intelligent AI companion within the MentorLeap ecosystem. Designed using insights from Mridu Bhandari's leadership experience, MISHA helps professionals develop communication skills, leadership confidence and career clarity.",
-              "Whether you are preparing for interviews, creating presentations, researching ideas or navigating learning programs, MISHA provides instant guidance and structured insights.",
-            ].map((text, i) => (
-              <p
-                key={i}
-                className="mb-4"
-                style={{
-                  color: "#cbd5f5",
-                  lineHeight: "1.7",
-                  fontSize: "15px",
-                  opacity: visible ? 1 : 0,
-                  transform: visible ? "translateY(0)" : "translateY(12px)",
-                  transition: `opacity 0.5s ease ${0.4 + i * 0.1}s, transform 0.5s ease ${0.4 + i * 0.1}s`,
-                }}
-              >
-                {text}
-              </p>
-            ))}
+            <p
+              className="mb-8"
+              style={{
+                color: "#cbd5f5",
+                lineHeight: "1.7",
+                fontSize: "15px",
+                opacity: visible ? 1 : 0,
+                transform: visible ? "translateY(0)" : "translateY(12px)",
+                transition: "opacity 0.5s ease 0.4s, transform 0.5s ease 0.4s",
+              }}
+            >
+              MISHA is not a generic chatbot. She is a partner to learners, helping them to simulate interviews, refine investor pitches, practice speeches & presentations, prepare for boardroom conversations, improve executive articulation, and build strategic visibility.
+            </p>
 
             {/* CAPABILITIES */}
             <div

@@ -46,20 +46,26 @@ export const CourseService = {
     async addModule(courseId: string, module: Module) {
         await db.collection("courses").doc(courseId).update({
             modules: admin.firestore.FieldValue.arrayUnion(module),
+            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
         });
     },
 
     async addLesson(courseId: string, moduleId: string, lesson: Lesson) {
+        // Warning: This still requires a fetch to update the correct module within the array.
+        // For production, consider moving modules to a sub-collection if lessons are added frequently.
         const course = await this.getCourse(courseId);
         if (!course) throw new Error("Course not found");
 
-        const updatedModules = course.modules.map((mod) => {
+        const updatedModules = course.modules.map((mod: Module) => {
             if (mod.id === moduleId) {
                 return { ...mod, lessons: [...mod.lessons, lesson] };
             }
             return mod;
         });
 
-        await db.collection("courses").doc(courseId).update({ modules: updatedModules });
+        await db.collection("courses").doc(courseId).update({ 
+            modules: updatedModules,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
     },
 };

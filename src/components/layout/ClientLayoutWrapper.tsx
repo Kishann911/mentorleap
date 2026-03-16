@@ -22,17 +22,16 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
   const isDashboardPath = pathname.startsWith("/dashboard");
   const isCoursePath = pathname.startsWith("/courses") || pathname.startsWith("/course-player");
 
-  // Clean app layouts without marketing elements
-  const isAppPath = isAdminPath || isDashboardPath || isAuthPath || isCoursePath;
-
   useEffect(() => {
     if (!loading && user && pathname === "/") {
       router.replace(isAdmin ? "/admin" : "/dashboard");
     }
   }, [user, isAdmin, loading, pathname, router]);
 
-  // For App/Admin/Auth/Course paths or ANY logged-in user: Clean layout without landing page elements
-  if (isAppPath || user) {
+  // Routes that should NOT have marketing header/footer
+  const isExcludedPath = isAdminPath || isDashboardPath || isAuthPath || pathname.startsWith("/course-player");
+
+  if (isExcludedPath) {
     return (
       <main className="min-h-screen bg-[#020617] relative">
         {children}

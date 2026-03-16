@@ -98,33 +98,21 @@ function CountdownUnit({ value, label }: { value: number; label: string }) {
   );
 }
 
-const cards = [
-  {
-    key: "free",
-    title: "Free Personality Development Course",
-    date: "15 March 2026",
-    desc: "A powerful one-hour session with Mridu Bhandari designed to help professionals build confidence, communication clarity and leadership presence.",
-    price: "₹2999",
-    priceHighlight: "FREE",
-    highlightColor: "#22c55e",
-    cta: "Reserve Your Seat",
-  },
-  {
-    key: "bootcamp",
-    title: "Leadership Transformation Bootcamp",
-    date: "28 – 29 March 2026",
-    desc: "An immersive professional development experience focused on leadership communication, confidence and strategic thinking.",
-    price: "₹7999",
-    priceHighlight: null,
-    highlightColor: null,
-    cta: "Register for Bootcamp",
-  },
-];
+import { fetchEvents } from "@/lib/api";
 
 export default function LaunchSection() {
   const { ref, visible } = useInView();
   const [hovered, setHovered] = useState<number | null>(null);
   const time = useCountdown(LAUNCH_DATE);
+  const [events, setEvents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchEvents().then(data => {
+      setEvents(data.slice(0, 2)); // Show top 2 events
+      setLoading(false);
+    });
+  }, []);
 
   return (
     <>
@@ -223,83 +211,77 @@ export default function LaunchSection() {
         </p>
 
         {/* CARDS GRID */}
-        <div
-          className="mx-auto grid gap-10"
-          style={{ maxWidth: "1100px", gridTemplateColumns: "repeat(2, 1fr)" }}
-          suppressHydrationWarning
-        >
-          {cards.map((card, i) => (
-            <div
-              key={card.key}
-              className="relative rounded-2xl overflow-hidden text-left"
-              onMouseEnter={() => setHovered(i)}
-              onMouseLeave={() => setHovered(null)}
-              style={{
-                background: "#020617",
-                padding: "40px",
-                border: hovered === i
-                  ? "1px solid #00e5ff"
-                  : "1px solid rgba(255,255,255,0.08)",
-                transform: visible
-                  ? hovered === i ? "translateY(-10px)" : "translateY(0)"
-                  : "translateY(40px)",
-                boxShadow: hovered === i
-                  ? "0 30px 70px rgba(0,229,255,0.2)"
-                  : "none",
-                opacity: visible ? 1 : 0,
-                transition: `opacity 0.6s ease ${0.2 + i * 0.15}s, transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease`,
-              }}
-            >
-              <div className="ai-glow" />
+        {!loading && events.length > 0 && (
+          <div
+            className="mx-auto grid gap-10"
+            style={{ 
+              maxWidth: "1100px", 
+              gridTemplateColumns: events.length === 1 ? "1fr" : "repeat(2, 1fr)" 
+            }}
+            suppressHydrationWarning
+          >
+            {events.map((event, i) => (
+              <div
+                key={event.id}
+                className="relative rounded-2xl overflow-hidden text-left"
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered(null)}
+                style={{
+                  background: "#020617",
+                  padding: "40px",
+                  border: hovered === i
+                    ? "1px solid #00e5ff"
+                    : "1px solid rgba(255,255,255,0.08)",
+                  transform: visible
+                    ? hovered === i ? "translateY(-10px)" : "translateY(0)"
+                    : "translateY(40px)",
+                  boxShadow: hovered === i
+                    ? "0 30px 70px rgba(0,229,255,0.2)"
+                    : "none",
+                  opacity: visible ? 1 : 0,
+                  transition: `opacity 0.6s ease ${0.2 + i * 0.15}s, transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease`,
+                }}
+              >
+                <div className="ai-glow" />
 
-              <div style={{ position: "relative", zIndex: 2 }}>
-                <h3
-                  className="text-white font-bold mb-2"
-                  style={{ fontSize: "24px" }}
-                >
-                  {card.title}
-                </h3>
+                <div style={{ position: "relative", zIndex: 2 }}>
+                  <h3
+                    className="text-white font-bold mb-2"
+                    style={{ fontSize: "24px" }}
+                  >
+                    {event.title}
+                  </h3>
 
-                <p
-                  className="mb-4 font-medium"
-                  style={{ color: "#00e5ff", fontSize: "14px" }}
-                >
-                  📅 {card.date}
-                </p>
+                  <p
+                    className="mb-4 font-medium"
+                    style={{ color: "#00e5ff", fontSize: "14px" }}
+                  >
+                    📅 {event.date?._seconds ? new Date(event.date._seconds * 1000).toLocaleDateString() : new Date(event.date).toLocaleDateString()}
+                  </p>
 
-                <p
-                  className="mb-6"
-                  style={{ color: "#cbd5f5", fontSize: "14px", lineHeight: "1.6" }}
-                >
-                  {card.desc}
-                </p>
+                  <p
+                    className="mb-6"
+                    style={{ color: "#cbd5f5", fontSize: "14px", lineHeight: "1.6" }}
+                  >
+                    {event.description}
+                  </p>
 
-                {/* PRICE */}
-                <div
-                  className="font-bold mb-6"
-                  style={{ fontSize: "24px", color: "white" }}
-                >
-                  {card.price}
-                  {card.priceHighlight && (
-                    <span
-                      style={{
-                        color: card.highlightColor!,
-                        fontSize: "20px",
-                        marginLeft: "10px",
-                      }}
-                    >
-                      {card.priceHighlight}
-                    </span>
-                  )}
+                  {/* PRICE */}
+                  <div
+                    className="font-bold mb-6"
+                    style={{ fontSize: "24px", color: "white" }}
+                  >
+                    {event.price === 0 ? "FREE" : `₹${event.price}`}
+                  </div>
+
+                  <Link href={`/events/${event.id}`} className="launch-btn">
+                    Reserve Your Seat
+                  </Link>
                 </div>
-
-                <Link href="/auth/register" className="launch-btn">
-                  {card.cta}
-                </Link>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* COUNTDOWN */}
         {visible && (
