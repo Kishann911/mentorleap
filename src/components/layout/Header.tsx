@@ -9,7 +9,6 @@ const navLinks = [
   { label: "Explore Courses", href: "/courses" },
   { label: "Executive Coaching", href: "/executive-coaching" },
   { label: "Live Events", href: "/events" },
-  { label: "Resource Library", href: "/resources" },
   { label: "MentorLeap Studio", href: "/mentorleap-studio" },
   { label: "Hire Mridu as Anchor", href: "/hire-mridu-anchor" },
   { label: "Blog", href: "/blog" },

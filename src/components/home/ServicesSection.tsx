@@ -122,7 +122,6 @@ export default function ServicesSection() {
               { title: "Corporate Training", icon: "🏢", desc: "Customised training programs and workshops designed for organisations that want to strengthen communication, leadership conversations and structured thinking across teams." },
               { title: "Live Online Events", icon: "🌐", desc: "Interactive masterclasses, bootcamps and cohorts for public speaking, leadership communication and executive presence - transforming professionals through applied learning." },
               { title: "Recorded Courses", icon: "🎥", desc: "Self-paced learning programs that help professionals build communication frameworks and leadership thinking at their own pace." },
-              { title: "Digital Resources", icon: "📄", desc: "Frameworks, playbooks, worksheets and structured learning tools designed to help professionals strengthen communication and professional growth." },
               { title: "Mentorleap Studio", icon: "🎙", desc: "Your one-stop hub for articles, insights, content into everything that’s changing at the modern global workplace – helping you become future-ready." }
             ].map((s, i) => (
               <div

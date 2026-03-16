@@ -198,7 +198,6 @@ export default function Footer() {
               Resources
             </h4>
             <ul className="space-y-4 p-0 list-none">
-              <li><Link href="/resources" className="footer-nav-link">Digital Resources</Link></li>
               <li><Link href="/studio" className="footer-nav-link">MentorLeap Studio</Link></li>
               <li><Link href="/privacy" className="footer-nav-link">Privacy Policy</Link></li>
               <li><Link href="/terms" className="footer-nav-link">Terms of Service</Link></li>
