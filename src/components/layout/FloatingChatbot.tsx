@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useAuth } from "@/components/providers/AuthProvider";
 import Link from "next/link";
-import { Send, Bot, User, Sparkles, X } from "lucide-react";
 
 interface Message {
   role: "bot" | "user";
@@ -120,8 +119,9 @@ export default function FloatingChatbot() {
     setIsTyping(true);
 
     try {
+      // Map history for context-aware responses (same as student dashboard)
       const history = messages.map(m => ({ 
-        role: m.role === "bot" ? "assistant" : "user", 
+        role: m.role === "bot" ? "assistant" : "user" as const, 
         content: m.text 
       }));
       history.push({ role: "user", content: val });
@@ -129,18 +129,21 @@ export default function FloatingChatbot() {
       const res = await fetch("/api/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: history, message: val }),
+        body: JSON.stringify({ 
+          messages: history,
+          message: val 
+        }),
       });
       const data = await res.json();
 
       setMessages((prev) => [
         ...prev,
-        { role: "bot", text: data.reply || "I encountered an error. Please try again." },
+        { role: "bot", text: data.reply || data.response || "I'm processing that session. One moment..." },
       ]);
     } catch (error) {
       setMessages((prev) => [
         ...prev,
-        { role: "bot", text: "I'm having a connection glitch. Can you check your connection?" },
+        { role: "bot", text: "I'm having a slight connection glitch. Can we try that again?" },
       ]);
     } finally {
       setIsTyping(false);
@@ -233,38 +236,14 @@ export default function FloatingChatbot() {
         .misha-close-btn {
           margin-left: auto;
           cursor: pointer;
+          font-size: 20px;
           color: #94a3b8;
+          line-height: 1;
           transition: color 0.2s ease, transform 0.2s ease;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 8px;
         }
         .misha-close-btn:hover {
           color: white;
           transform: rotate(90deg);
-        }
-        .misha-bot-icon {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-        .misha-user-icon {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
         }
       `}</style>
 
@@ -283,55 +262,54 @@ export default function FloatingChatbot() {
           className={`misha-chat-window ${chatVisible ? "visible" : ""}`}
           suppressHydrationWarning
           style={{
-            width: "360px",
+            width: "340px",
             background: "#020617",
-            borderRadius: "20px",
+            borderRadius: "16px",
             position: "absolute",
             bottom: "85px",
             right: "0",
             overflow: "hidden",
-            boxShadow: "0 30px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.08)",
+            boxShadow: "0 30px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,229,255,0.1)",
             display: "flex",
             flexDirection: "column",
-            height: "520px",
+            height: "480px",
           }}
         >
-          {/* Background glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] bg-[#00e5ff]/5 blur-[80px] rounded-full pointer-events-none"></div>
-
           {/* HEADER */}
           <div
             suppressHydrationWarning
             style={{
-              background: "rgba(15, 23, 42, 0.9)",
-              backdropFilter: "blur(12px)",
-              borderBottom: "1px solid rgba(255,255,255,0.08)",
-              padding: "14px 18px",
+              background: "linear-gradient(135deg, #0f172a, #1e1b4b)",
+              borderBottom: "1px solid rgba(0,229,255,0.1)",
+              padding: "12px 14px",
               display: "flex",
               alignItems: "center",
-              gap: "12px",
+              gap: "10px",
               flexShrink: 0,
-              zIndex: 20,
             }}
           >
             <div
               suppressHydrationWarning
               style={{
-                width: "42px",
-                height: "42px",
-                borderRadius: "14px",
-                background: "linear-gradient(135deg, #00e5ff, #6366f1)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0 0 15px rgba(0,229,255,0.3)",
+                width: "36px",
+                height: "36px",
+                borderRadius: "50%",
+                overflow: "hidden",
+                border: "2px solid rgba(0,229,255,0.4)",
+                flexShrink: 0,
               }}
             >
-              <Sparkles size={20} className="text-white" />
+              <Image
+                src="https://marktaleevents.com/mentorleap/wp-content/uploads/2026/03/ChatGPT-Image-Mar-4-2026-06_28_34-PM.png"
+                alt="MISHA"
+                width={36}
+                height={36}
+                style={{ objectFit: "cover" }}
+              />
             </div>
             <div suppressHydrationWarning>
               <div
-                style={{ color: "white", fontWeight: 800, fontSize: "16px", letterSpacing: "-0.01em" }}
+                style={{ color: "white", fontWeight: 700, fontSize: "14px" }}
                 suppressHydrationWarning
               >
                 MISHA
@@ -339,15 +317,23 @@ export default function FloatingChatbot() {
               <div
                 suppressHydrationWarning
                 style={{
-                  fontSize: "10px",
+                  fontSize: "11px",
                   color: "#00e5ff",
-                  fontWeight: 700,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.1em",
-                  marginTop: "1px"
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "5px",
                 }}
               >
-                AI Mentor Online
+                <span
+                  style={{
+                    width: "6px",
+                    height: "6px",
+                    borderRadius: "50%",
+                    background: "#22c55e",
+                    display: "inline-block",
+                  }}
+                />
+                Your AI Mentor · Online
               </div>
             </div>
             <button
@@ -355,7 +341,7 @@ export default function FloatingChatbot() {
               onClick={() => setOpen(false)}
               aria-label="Close"
             >
-              <X size={20} />
+              ×
             </button>
           </div>
 
@@ -366,48 +352,71 @@ export default function FloatingChatbot() {
             suppressHydrationWarning
             style={{
               flex: 1,
-              padding: "20px",
+              padding: "14px",
               overflowY: "auto",
               display: "flex",
               flexDirection: "column",
-              gap: "20px",
-              position: "relative",
-              zIndex: 10,
+              gap: "8px",
             }}
           >
-            {messages.map((m, i) => (
+            {/* GREETING typewriter or messages */}
+            {!greetingDone ? (
               <div
-                key={i}
-                className={`misha-msg flex gap-3 ${m.role === "user" ? "flex-row-reverse" : ""}`}
-                style={{ maxWidth: "100%" }}
+                className="misha-msg"
+                suppressHydrationWarning
+                style={{
+                  background: "#0f172a",
+                  color: "#cbd5f5",
+                  padding: "10px 14px",
+                  borderRadius: "10px 10px 10px 2px",
+                  fontSize: "13px",
+                  lineHeight: "1.6",
+                  whiteSpace: "pre-line",
+                  maxWidth: "85%",
+                }}
               >
-                <div className={m.role === "bot" ? "misha-bot-icon" : "misha-user-icon"}>
-                  {m.role === "bot" ? <Bot size={16} className="text-[#00e5ff]" /> : <User size={16} className="text-[#cbd5f5]" />}
-                </div>
-                <div
-                  className="p-4 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap"
+                {typedGreeting}
+                <span
                   style={{
-                    background: m.role === "bot" ? "rgba(255,255,255,0.03)" : "linear-gradient(135deg,#00e5ff,#6366f1)",
-                    border: m.role === "bot" ? "1px solid rgba(255,255,255,0.05)" : "none",
+                    display: "inline-block",
+                    width: "2px",
+                    height: "13px",
+                    background: "#00e5ff",
+                    marginLeft: "2px",
+                    verticalAlign: "middle",
+                    animation: "mishaPulse 0.8s step-end infinite",
+                  }}
+                />
+              </div>
+            ) : (
+              messages.map((m, i) => (
+                <div
+                  key={i}
+                  className="misha-msg"
+                  style={{
+                    background: m.role === "bot" ? "#0f172a" : "linear-gradient(135deg,#00e5ff,#6366f1)",
                     color: m.role === "bot" ? "#cbd5f5" : "#020617",
-                    fontWeight: m.role === "user" ? 600 : 400,
-                    borderRadius: m.role === "bot" ? "18px 18px 18px 4px" : "18px 18px 4px 18px",
-                    maxWidth: "80%",
+                    padding: "10px 14px",
+                    borderRadius: m.role === "bot"
+                      ? "10px 10px 10px 2px"
+                      : "10px 10px 2px 10px",
+                    fontSize: "13px",
+                    lineHeight: "1.6",
+                    whiteSpace: "pre-line",
+                    maxWidth: "85%",
+                    alignSelf: m.role === "user" ? "flex-end" : "flex-start",
                   }}
                 >
                   {m.text}
                 </div>
-              </div>
-            ))}
+              ))
+            )}
             {isTyping && (
-              <div className="misha-msg flex gap-3">
-                <div className="misha-bot-icon">
-                  <Bot size={16} className="text-[#00e5ff]" />
-                </div>
-                <div className="p-4 rounded-2xl bg-white/5 border border-white/5 rounded-tl-sm flex items-center gap-1.5 h-[52px]">
-                    <div className="w-2 h-2 rounded-full bg-[#00e5ff] animate-bounce"></div>
-                    <div className="w-2 h-2 rounded-full bg-[#00e5ff] animate-bounce [animation-delay:-0.15s]"></div>
-                    <div className="w-2 h-2 rounded-full bg-[#00e5ff] animate-bounce [animation-delay:-0.3s]"></div>
+              <div className="misha-msg" style={{ background: "#0f172a", color: "#00e5ff", padding: "10px 14px", borderRadius: "10px 10px 10px 2px", alignSelf: "flex-start", opacity: 0.6 }}>
+                <div style={{ display: "flex", gap: "4px" }}>
+                  <div className="w-1.5 h-1.5 bg-[#00e5ff] rounded-full animate-bounce"></div>
+                  <div className="w-1.5 h-1.5 bg-[#00e5ff] rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                  <div className="w-1.5 h-1.5 bg-[#00e5ff] rounded-full animate-bounce [animation-delay:0.4s]"></div>
                 </div>
               </div>
             )}
@@ -419,14 +428,11 @@ export default function FloatingChatbot() {
             style={{
               display: "flex",
               gap: "8px",
-              padding: "10px 16px",
-              flexWrap: "nowrap",
-              overflowX: "auto",
-              borderTop: "1px solid rgba(255,255,255,0.05)",
+              padding: "8px 12px",
+              flexWrap: "wrap",
+              borderTop: "1px solid rgba(255,255,255,0.04)",
               flexShrink: 0,
-              zIndex: 20,
             }}
-            className="custom-scrollbar"
           >
             {SUGGESTIONS.map((s) => (
               <button
@@ -443,32 +449,22 @@ export default function FloatingChatbot() {
           <div
             suppressHydrationWarning
             style={{
-              padding: "16px",
-              background: "rgba(15, 23, 42, 0.8)",
-              backdropFilter: "blur(12px)",
+              display: "flex",
               borderTop: "1px solid rgba(255,255,255,0.08)",
               flexShrink: 0,
-              zIndex: 20,
             }}
           >
-            <div className="relative flex items-center">
-              <input
-                ref={inputRef}
-                className="w-full bg-[#020617] border border-white/10 rounded-xl py-4 pl-5 pr-12 text-sm text-white focus:outline-none focus:border-[#00e5ff]/50 transition-colors"
-                placeholder="Ask MISHA anything..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKey}
-                disabled={isTyping}
-              />
-              <button 
-                className="absolute right-2 p-2 rounded-lg bg-[#00e5ff]/10 text-[#00e5ff] hover:bg-[#00e5ff]/20 disabled:opacity-50 transition-all"
-                onClick={() => send(input)}
-                disabled={!input.trim() || isTyping}
-              >
-                <Send size={18} />
-              </button>
-            </div>
+            <input
+              ref={inputRef}
+              className="misha-input-field"
+              placeholder="Ask MISHA anything..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKey}
+            />
+            <button className="misha-send-btn" onClick={() => send(input)}>
+              ➤
+            </button>
           </div>
         </div>
 
@@ -484,19 +480,24 @@ export default function FloatingChatbot() {
           }}
           aria-label="Open MISHA chat"
           style={{
-            width: "72px",
-            height: "72px",
-            borderRadius: "24px",
+            width: "70px",
+            height: "70px",
+            borderRadius: "50%",
             background: "linear-gradient(135deg,#00e5ff,#6366f1)",
             border: "none",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             cursor: "pointer",
-            boxShadow: "0 10px 40px rgba(0,229,255,0.3)",
           }}
         >
-          <Sparkles size={32} className="text-white" />
+          <Image
+            src="https://marktaleevents.com/mentorleap/wp-content/uploads/2026/03/ChatGPT-Image-Mar-4-2026-06_28_34-PM.png"
+            alt="MISHA"
+            width={44}
+            height={44}
+            style={{ borderRadius: "50%", objectFit: "cover" }}
+          />
         </button>
       </div>
     </>
